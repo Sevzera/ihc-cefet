@@ -23,7 +23,7 @@ export const Profile = () => {
 
   const { userId } = useParams();
 
-  const { data: user, refetch: refetchUser } = useUser(userId, {
+  const { data: user } = useUser(userId, {
     initialData: {},
   });
   const { data: friends } = useUsers(
@@ -36,57 +36,40 @@ export const Profile = () => {
       initialData: [],
     }
   );
-  const [status, setStatus] = React.useState("initial");
-  const currentPage = React.useRef(1);
-  const [localPosts, setLocalPosts] = React.useState([]);
-  const { data: posts, refetch: refetchPosts } = usePosts(
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const { refetch, status } = usePosts(
     {
       userId: userId,
       options: {
-        page: currentPage.current,
+        page: currentPage,
         size: 2,
         user: true,
       },
     },
     {
       initialData: [],
-      onSuccess: (data) => {
-        if (data.length === 0) {
-          setStatus("done");
-        }
-        data.forEach((post) => {
-          if (status === "initial" || status === "fetching") {
-            if (!localPosts.some((p) => p._id === post._id)) {
-              setLocalPosts((prev) => [...prev, post]);
-            }
-            setStatus("fetched");
-          }
-        });
+      onSuccess: () => {
+        const cachedPosts = queryClient
+          .getQueryCache()
+          .findAll(["posts"])
+          .map((query) => {
+            return query.state.data;
+          })
+          .flat();
+        setPosts(cachedPosts);
       },
     }
   );
+  const [posts, setPosts] = React.useState([]);
 
   const localUser = JSON.parse(localStorage.getItem("user"));
   const isMyProfile = localUser._id === userId;
   const isMyFriend = localUser.friends.includes(userId);
 
-  React.useEffect(() => {
-    for (let i = 0; i < currentPage.current; i++) {
-      const cachedPosts = queryClient.getQueryCache().find(["posts", i + 1])
-        .state.data;
-    }
-  }, [posts]);
-
   return (
     <div className="h-full w-full overflow-auto pb-10">
       {isMyProfile && isModalOpen && (
-        <EditProfileModal
-          refetchData={() => {
-            refetchUser();
-            refetchPosts();
-          }}
-          closeModal={() => setIsModalOpen(false)}
-        />
+        <EditProfileModal closeModal={() => setIsModalOpen(false)} />
       )}
       <div id="main-profile" className="pb-14">
         <img
@@ -134,42 +117,37 @@ export const Profile = () => {
           </div>
           {isMyProfile && (
             <div id="create-post" className="flex w-full">
-              <CreatePost
-                icon={<Icon.Image size={24} />}
-                size={"w-full"}
-                setLocalPosts={setLocalPosts}
-              />
+              <CreatePost icon={<Icon.Image size={24} />} size={"w-full"} />
             </div>
           )}
           <div
             id="posts"
             className="flex w-full flex-col gap-5 rounded-b-lg rounded-t-lg bg-light-background p-2 dark:bg-dark-background"
           >
-            {localPosts.map((post, index) => (
-              <div
-                className="flex h-fit w-full flex-col gap-5"
-                key={`post-${post._id}`}
-              >
-                <Post post={post} setLocalPosts={setLocalPosts} />
-                {localPosts.length > 1 && index < localPosts.length - 1 && (
-                  <HorizontalDivider />
-                )}
-              </div>
-            ))}
+            {posts.map((post, index) => {
+              return (
+                <div
+                  className="flex h-fit w-full flex-col gap-5"
+                  key={`post-${post._id}`}
+                >
+                  <Post post={post} />
+                  {posts.length > 1 && index < posts.length - 1 && (
+                    <HorizontalDivider />
+                  )}
+                </div>
+              );
+            })}
           </div>
-          {status === "fetching" && (
-            <div className="mx-auto">Carregando...</div>
-          )}
+          ;
+          {status === "loading" && <div className="mx-auto">Carregando...</div>}
           {status === "done" && (
             <div className="mx-auto">Não há mais posts para carregar</div>
           )}
-          {status === "fetched" && (
+          {status === "success" && (
             <button
               onClick={async () => {
-                currentPage.current = currentPage.current + 1;
-                setStatus("fetching");
-                await new Promise((resolve) => setTimeout(resolve, 1000));
-                refetchPosts();
+                setCurrentPage(currentPage + 1);
+                refetch();
               }}
             >
               Carregar mais posts

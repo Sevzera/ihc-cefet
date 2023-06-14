@@ -7,7 +7,7 @@ import { useUpdateUser, useUser } from "../../api/user";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
 
-export const EditProfileModal = ({ refetchData, closeModal }) => {
+export const EditProfileModal = ({ closeModal }) => {
   const queryClient = useQueryClient();
   const { userId } = useParams();
 
@@ -21,7 +21,8 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
 
   const { mutate: updateUser } = useUpdateUser(userId, {
     onSuccess: () => {
-      refetchData();
+      queryClient.refetchQueries(["posts"]);
+      queryClient.refetchQueries(["user", userId]);
       closeModal();
     },
   });

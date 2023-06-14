@@ -8,7 +8,7 @@ import { useCreatePost, usePost } from "../../api/post.js";
 
 import { useQueryClient } from "react-query";
 
-export const CreatePost = ({ icon, size, setLocalPosts }) => {
+export const CreatePost = ({ icon, size }) => {
   const { mutate: createPost } = useCreatePost();
   const queryClient = useQueryClient();
   const localUser = JSON.parse(localStorage.getItem("user"));
@@ -31,9 +31,8 @@ export const CreatePost = ({ icon, size, setLocalPosts }) => {
   usePost(createdPostId, {
     enabled: Boolean(createdPostId),
     onSuccess: (data) => {
-      setLocalPosts((prev) => [data, ...prev]);
       setCreatedPostId(null);
-      queryClient.invalidateQueries("posts");
+      queryClient.invalidateQueries(["posts"]);
     },
   });
   const onClickPost = () => {
@@ -58,7 +57,7 @@ export const CreatePost = ({ icon, size, setLocalPosts }) => {
           id={`textarea-${localUser.name}`}
           value={data.text}
           placeholder="O que você está pensando..."
-          className="peer w-full resize-none rounded-lg bg-light-inputFill bg-transparent py-2 px-3 text-light-secondary placeholder-input-text outline-none"
+          className="peer w-full resize-none rounded-lg bg-light-inputFill bg-transparent px-3 py-2 text-light-secondary placeholder-input-text outline-none"
           onInput={(e) => onInputTextArea(e)}
         />
       </div>

@@ -11,8 +11,10 @@ import { postMock, friendMock } from "../../utils";
 import { usePosts } from "../../api/post";
 
 import { useUsers } from "../../api/user";
+import { useQueryClient } from "react-query";
 
 export const Home = () => {
+  const queryClient = useQueryClient();
   const localUser = JSON.parse(localStorage.getItem("user"));
   const { data: friends } = useUsers(
     {
@@ -25,37 +27,33 @@ export const Home = () => {
     }
   );
 
-  const [status, setStatus] = React.useState("initial");
-  const [localPosts, setLocalPosts] = React.useState([]);
-  const currentPage = React.useRef(1);
-  const { refetch } = usePosts(
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const { refetch, status } = usePosts(
     {
       userId: {
         $in: [...localUser.friends, localUser._id],
       },
       options: {
-        page: currentPage.current,
+        page: currentPage,
         size: 2,
         user: true,
       },
     },
     {
       initialData: [],
-      onSuccess: (data) => {
-        if (data.length === 0) {
-          setStatus("done");
-        }
-        data.forEach((post) => {
-          if (status === "initial" || status === "fetching") {
-            if (!localPosts.some((p) => p._id === post._id)) {
-              setLocalPosts((prev) => [...prev, post]);
-            }
-            setStatus("fetched");
-          }
-        });
+      onSuccess: () => {
+        const cachedPosts = queryClient
+          .getQueryCache()
+          .findAll(["posts"])
+          .map((query) => {
+            return query.state.data;
+          })
+          .flat();
+        setPosts(cachedPosts);
       },
     }
   );
+  const [posts, setPosts] = React.useState([]);
 
   return (
     <div className="h-full w-full overflow-auto py-10 ">
@@ -65,19 +63,19 @@ export const Home = () => {
             <FriendList friends={friends} />
           </div>
           <div id="create-post" className="flex w-full">
-            <CreatePost icon={<Icon.Image size={24} />} size={"w-full"} setLocalPosts={setLocalPosts} />
+            <CreatePost icon={<Icon.Image size={24} />} size={"w-full"} />
           </div>
           <div
             id="posts"
             className="flex w-full flex-col gap-5 rounded-b-lg rounded-t-lg bg-light-background p-2 dark:bg-dark-background"
           >
-            {localPosts.map((post, index) => (
+            {posts.map((post, index) => (
               <div
                 className="flex h-fit w-full flex-col gap-5"
                 key={`post-${post._id}`}
               >
-                <Post post={post} setLocalPosts={setLocalPosts} />
-                {localPosts.length > 1 && index < localPosts.length - 1 && (
+                <Post post={post} />
+                {posts.length > 1 && index < posts.length - 1 && (
                   <HorizontalDivider />
                 )}
               </div>
@@ -92,9 +90,7 @@ export const Home = () => {
           {status === "fetched" && (
             <button
               onClick={async () => {
-                currentPage.current = currentPage.current + 1;
-                setStatus("fetching");
-                await new Promise((resolve) => setTimeout(resolve, 1000));
+                setCurrentPage(currentPage + 1);
                 refetch();
               }}
             >
