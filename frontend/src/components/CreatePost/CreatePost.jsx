@@ -68,7 +68,7 @@ export const CreatePost = ({ icon, size }) => {
             label="Publicar"
             customStyles="w-fit p-2 rounded-t-none bg-light-primary text-white dark:text-light-background hover:brightness-75 dark:hover:brightness-75"
             onClick={onClickPost}
-            disabled={isCreatePostLoading}
+            disabled={!data.text || isCreatePostLoading}
           />
         </div>
       </div>

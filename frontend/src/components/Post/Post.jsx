@@ -131,7 +131,7 @@ export const Post = ({ post }) => {
           label="Comentar"
           customStyles="w-fit p-2 bg-light-primary text-white dark:text-light-background hover:brightness-75 dark:hover:brightness-75"
           onClick={onClickComment}
-          disabled={isUpdatePostLoading}
+          disabled={!commentText || isUpdatePostLoading}
         />
       </div>
       <div id="users-comment" className="mt-4 flex h-fit w-full flex-col">
