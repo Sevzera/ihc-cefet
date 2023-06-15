@@ -1,15 +1,35 @@
 import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcrypt";
 import database from "../database.js";
 import imgbbUploader from "imgbb-uploader";
 const userCollection = database.collection("user");
 
 const userService = {};
 
+userService.login = async (credentials) => {
+  try {
+    const { email, password } = credentials;
+    if (!email || !password) throw new Error("Missing credentials");
+
+    const user = await userCollection.findOne({ email });
+    if (!user) throw new Error("Email não cadastrado");
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) throw new Error("Senha incorreta");
+
+    return user;
+  } catch (error) {
+    console.log("Error in userService.login: ", error);
+    throw error;
+  }
+};
+
 userService.show = async (id) => {
   try {
     return await userCollection.findOne({ _id: id });
   } catch (error) {
     console.log("Error in userService.show: ", error);
+    throw error;
   }
 };
 
@@ -18,6 +38,7 @@ userService.index = async (filters) => {
     return await userCollection.find(filters ? { ...filters } : {}).toArray();
   } catch (error) {
     console.log("Error in userService.index: ", error);
+    throw error;
   }
 };
 
@@ -27,6 +48,7 @@ userService.create = async (data) => {
     if (!email || !password || !name)
       throw new Error("Missing required fields");
 
+    const encryptedPassword = await bcrypt.hash(password, 10);
     const defaultProfilePicture =
       "https://i.ibb.co/nwfMnMC/my-Manga-List-default-user-profile-pic.png";
     const defaultBanner =
@@ -34,7 +56,7 @@ userService.create = async (data) => {
     const user = {
       _id: uuidv4(),
       email,
-      password,
+      password: encryptedPassword,
       name,
       profilePictureSrc: defaultProfilePicture,
       bannerImageSrc: defaultBanner,
@@ -62,6 +84,7 @@ userService.create = async (data) => {
     }
   } catch (error) {
     console.log("Error in userService.create: ", error);
+    throw error;
   }
 };
 
@@ -111,6 +134,7 @@ userService.update = async (id, data) => {
     return userCollection.findOneAndUpdate({ _id: id }, { $set: data });
   } catch (error) {
     console.log("Error in userService.update: ", error);
+    throw error;
   }
 };
 
@@ -120,6 +144,7 @@ userService.delete = async (id) => {
     return await userCollection.deleteOne({ _id: id });
   } catch (error) {
     console.log("Error in userService.delete: ", error);
+    throw error;
   }
 };
 

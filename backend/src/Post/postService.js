@@ -30,8 +30,10 @@ postService.show = async (
     return postData;
   } catch (error) {
     console.log("Error in postService.show: ", error);
+    throw error;
   }
 };
+
 postService.index = async (
   filters,
   options = {
@@ -81,8 +83,10 @@ postService.index = async (
     return posts;
   } catch (error) {
     console.log("Error in postService.index: ", error);
+    throw error;
   }
 };
+
 postService.create = async (data) => {
   try {
     const { userId, text = "", imageSrc = "" } = data;
@@ -105,8 +109,10 @@ postService.create = async (data) => {
     return await postCollection.insertOne(post);
   } catch (error) {
     console.log("Error in postService.create: ", error);
+    throw error;
   }
 };
+
 postService.update = async (id, data) => {
   try {
     if (!id) throw new Error("Missing id");
@@ -123,14 +129,17 @@ postService.update = async (id, data) => {
     return await postCollection.updateOne({ _id: id }, { $set: post });
   } catch (error) {
     console.log("Error in postService.update: ", error);
+    throw error;
   }
 };
+
 postService.delete = async (id) => {
   try {
     if (!id) throw new Error("Missing id");
     return await postCollection.deleteOne({ _id: id });
   } catch (error) {
     console.log("Error in postService.delete: ", error);
+    throw error;
   }
 };
 

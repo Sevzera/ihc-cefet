@@ -12,7 +12,7 @@ import { VerticalDivider as Divider } from "../../components/Divider/";
 import { Input } from "../../components/Input/";
 import { Button } from "../../components/Button";
 import { IconButton } from "../../components/IconButton";
-import { useUsers } from "../../api/user";
+import { useLogin } from "../../api/user";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -23,35 +23,33 @@ export const Login = () => {
     console.log("Dark Mode: ", darkMode);
   };
 
-  const [user, setUser] = React.useState({
+  const [credentials, setCredentials] = React.useState({
     email: "",
     password: "",
   });
 
-  const [loggingIn, setLoggingIn] = React.useState(false);
-  useUsers(user, {
-    enabled: loggingIn,
-    onSuccess: ([data]) => {
-      if (!data) {
-        console.log("Usuário não encontrado!");
-      } else {
-        console.log("Usuario logado com sucesso!");
-        localStorage.setItem("user", JSON.stringify(data));
-        navigate(InsideLinks.home);
-      }
-      setLoggingIn(false);
-    },
-  });
+  const { mutate: login } = useLogin(credentials);
 
   const handleEmailChange = (event) => {
-    setUser({ ...user, email: event.target.value });
+    setCredentials({ ...credentials, email: event.target.value });
   };
   const handlePasswordChange = (event) => {
-    setUser({ ...user, password: event.target.value });
+    setCredentials({ ...credentials, password: event.target.value });
   };
 
   const handleLoginButtonClick = () => {
-    setLoggingIn(true);
+    login(credentials, {
+      onSettled: (result) => {
+        const { success } = result;
+        if (!success) {
+          const { message } = result;
+          return alert(message);
+        }
+        const { data } = result;
+        localStorage.setItem("user", JSON.stringify(data));
+        navigate(InsideLinks.home);
+      },
+    });
   };
   const handleRegisterButtonClick = () => {
     navigate(InsideLinks.register);
@@ -90,7 +88,7 @@ export const Login = () => {
             icon={<Icon.AtSign size={22} />}
             type="email"
             placeholder="Email"
-            value={user.email}
+            value={credentials.email}
             onChange={(event) => {
               handleEmailChange(event);
             }}
@@ -101,7 +99,7 @@ export const Login = () => {
             icon={<Icon.Key size={22} />}
             type="password"
             placeholder="Senha"
-            value={user.password}
+            value={credentials.password}
             onChange={(event) => {
               handlePasswordChange(event);
             }}
