@@ -8,30 +8,16 @@ import { usePost, useUpdatePost } from "../../api/post";
 
 import { useQueryClient } from "react-query";
 
-export const Post = ({ post, setLocalPosts }) => {
-  const { mutate: updatePost } = useUpdatePost(post._id);
+export const Post = ({ post }) => {
+  const { mutate: updatePost, isLoading: isUpdatePostLoading } = useUpdatePost(
+    post._id
+  );
   const queryClient = useQueryClient();
   const localUser = JSON.parse(localStorage.getItem("user"));
   const date = new Date(post.createdAt).toLocaleString();
 
   const [commentText, setCommentText] = React.useState("");
 
-  const [shouldRefetchPost, setShouldRefetchPost] = React.useState(false);
-  usePost(post._id, {
-    enabled: shouldRefetchPost,
-    onSuccess: (data) => {
-      setLocalPosts((prev) =>
-        prev.map((p) => {
-          if (p._id === data._id) {
-            return data;
-          }
-          return p;
-        })
-      );
-      setShouldRefetchPost(false);
-      queryClient.invalidateQueries("posts");
-    },
-  });
   const isPostLiked = post.likes.includes(localUser._id);
   const onClickLikePost = () => {
     const newLikes = isPostLiked
@@ -43,8 +29,7 @@ export const Post = ({ post, setLocalPosts }) => {
       },
       {
         onSuccess: () => {
-          setShouldRefetchPost(true);
-          queryClient.invalidateQueries("posts");
+          queryClient.refetchQueries("posts");
         },
       }
     );
@@ -64,8 +49,7 @@ export const Post = ({ post, setLocalPosts }) => {
       {
         onSuccess: () => {
           setCommentText("");
-          setShouldRefetchPost(true);
-          queryClient.invalidateQueries("posts");
+          queryClient.refetchQueries("posts");
         },
       }
     );
@@ -74,7 +58,7 @@ export const Post = ({ post, setLocalPosts }) => {
     const newComments = post.comments.map((comment, localIndex) => {
       if (localIndex === index) {
         const newCommentLikes = isCommentLiked
-          ? comment.likes.filter((userId) => userId !== me._id)
+          ? comment.likes.filter((userId) => userId !== localUser._id)
           : [...comment.likes, localUser._id];
         return {
           ...comment,
@@ -89,8 +73,7 @@ export const Post = ({ post, setLocalPosts }) => {
       },
       {
         onSuccess: () => {
-          setShouldRefetchPost(true);
-          queryClient.invalidateQueries("posts");
+          queryClient.refetchQueries("posts");
         },
       }
     );
@@ -148,6 +131,7 @@ export const Post = ({ post, setLocalPosts }) => {
           label="Comentar"
           customStyles="w-fit p-2 bg-light-primary text-white dark:text-light-background hover:brightness-75 dark:hover:brightness-75"
           onClick={onClickComment}
+          disabled={isUpdatePostLoading}
         />
       </div>
       <div id="users-comment" className="mt-4 flex h-fit w-full flex-col">
@@ -189,6 +173,7 @@ export const Post = ({ post, setLocalPosts }) => {
                     onClickFunction={() =>
                       onClickLikeComment(isCommentLiked, index)
                     }
+                    disabled={isUpdatePostLoading}
                   />
                   <p>{comment.likes.length}</p>
                 </div>

@@ -8,13 +8,12 @@ import { useCreatePost, usePost } from "../../api/post.js";
 
 import { useQueryClient } from "react-query";
 
-export const CreatePost = ({ icon, size, setLocalPosts }) => {
-  const { mutate: createPost } = useCreatePost();
+export const CreatePost = ({ icon, size }) => {
+  const { mutate: createPost, isLoading: isCreatePostLoading } =
+    useCreatePost();
   const queryClient = useQueryClient();
   const localUser = JSON.parse(localStorage.getItem("user"));
-  const [createdPostId, setCreatedPostId] = React.useState(null);
   const [data, setData] = React.useState({
-    _id: uuidv4(),
     text: "",
     imageSrc: "",
   });
@@ -28,23 +27,10 @@ export const CreatePost = ({ icon, size, setLocalPosts }) => {
     setData((prev) => ({ ...prev, text: e.target.value }));
   };
 
-  usePost(createdPostId, {
-    enabled: Boolean(createdPostId),
-    onSuccess: (data) => {
-      setLocalPosts((prev) => [data, ...prev]);
-      setCreatedPostId(null);
-      queryClient.invalidateQueries("posts");
-    },
-  });
   const onClickPost = () => {
     createPost(data, {
       onSuccess: () => {
-        setCreatedPostId(data._id);
-        setData({
-          _id: uuidv4(),
-          text: "",
-          imageSrc: "",
-        });
+        queryClient.refetchQueries("posts");
       },
     });
   };
@@ -58,7 +44,7 @@ export const CreatePost = ({ icon, size, setLocalPosts }) => {
           id={`textarea-${localUser.name}`}
           value={data.text}
           placeholder="O que você está pensando..."
-          className="peer w-full resize-none rounded-lg bg-light-inputFill bg-transparent py-2 px-3 text-light-secondary placeholder-input-text outline-none"
+          className="peer w-full resize-none rounded-lg bg-light-inputFill bg-transparent px-3 py-2 text-light-secondary placeholder-input-text outline-none"
           onInput={(e) => onInputTextArea(e)}
         />
       </div>
@@ -72,6 +58,7 @@ export const CreatePost = ({ icon, size, setLocalPosts }) => {
               icon={icon}
               tooltip="Adicionar foto"
               customButtonStyles="text-dark-background hover:dark:text-dark-background"
+              disabled={isCreatePostLoading}
             />
           </span>
         </div>
@@ -81,6 +68,7 @@ export const CreatePost = ({ icon, size, setLocalPosts }) => {
             label="Publicar"
             customStyles="w-fit p-2 rounded-t-none bg-light-primary text-white dark:text-light-background hover:brightness-75 dark:hover:brightness-75"
             onClick={onClickPost}
+            disabled={isCreatePostLoading}
           />
         </div>
       </div>

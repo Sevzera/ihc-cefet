@@ -35,7 +35,7 @@ export const Search = () => {
   );
 
   const onClickUser = (user) => {
-    navigate(`${InsideLinks.userProfile}/${localUser._id}`);
+    navigate(`${InsideLinks.userProfile}/${user._id}`);
   };
 
   return (

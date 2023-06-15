@@ -15,14 +15,13 @@ import { useParams } from "react-router-dom";
 import { useUser, useUsers } from "../../api/user";
 import { usePosts } from "../../api/post";
 
-import { useQueryClient } from "react-query";
+import { buildPostFeed } from "../../utils";
 
 export const Profile = () => {
-  const queryClient = useQueryClient();
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-
   const { userId } = useParams();
-
+  const localUser = JSON.parse(localStorage.getItem("user"));
+  const isMyProfile = localUser._id === userId;
+  const isMyFriend = localUser.friends.includes(userId);
   const { data: user, refetch: refetchUser } = useUser(userId, {
     initialData: {},
   });
@@ -36,46 +35,23 @@ export const Profile = () => {
       initialData: [],
     }
   );
-  const [status, setStatus] = React.useState("initial");
-  const currentPage = React.useRef(1);
-  const [localPosts, setLocalPosts] = React.useState([]);
-  const { data: posts, refetch: refetchPosts } = usePosts(
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const { refetch: refetchPosts } = usePosts(
     {
       userId: userId,
       options: {
-        page: currentPage.current,
+        page: currentPage,
         size: 2,
         user: true,
       },
     },
     {
       initialData: [],
-      onSuccess: (data) => {
-        if (data.length === 0) {
-          setStatus("done");
-        }
-        data.forEach((post) => {
-          if (status === "initial" || status === "fetching") {
-            if (!localPosts.some((p) => p._id === post._id)) {
-              setLocalPosts((prev) => [...prev, post]);
-            }
-            setStatus("fetched");
-          }
-        });
-      },
     }
   );
-
-  const localUser = JSON.parse(localStorage.getItem("user"));
-  const isMyProfile = localUser._id === userId;
-  const isMyFriend = localUser.friends.includes(userId);
-
-  React.useEffect(() => {
-    for (let i = 0; i < currentPage.current; i++) {
-      const cachedPosts = queryClient.getQueryCache().find(["posts", i + 1])
-        .state.data;
-    }
-  }, [posts]);
+  const posts = buildPostFeed(currentPage, [userId]);
 
   return (
     <div className="h-full w-full overflow-auto pb-10">
@@ -134,47 +110,34 @@ export const Profile = () => {
           </div>
           {isMyProfile && (
             <div id="create-post" className="flex w-full">
-              <CreatePost
-                icon={<Icon.Image size={24} />}
-                size={"w-full"}
-                setLocalPosts={setLocalPosts}
-              />
+              <CreatePost icon={<Icon.Image size={24} />} size={"w-full"} />
             </div>
           )}
           <div
             id="posts"
             className="flex w-full flex-col gap-5 rounded-b-lg rounded-t-lg bg-light-background p-2 dark:bg-dark-background"
           >
-            {localPosts.map((post, index) => (
+            {posts.map((post, index) => (
               <div
                 className="flex h-fit w-full flex-col gap-5"
                 key={`post-${post._id}`}
               >
-                <Post post={post} setLocalPosts={setLocalPosts} />
-                {localPosts.length > 1 && index < localPosts.length - 1 && (
+                <Post post={post} />
+                {posts.length > 1 && index < posts.length - 1 && (
                   <HorizontalDivider />
                 )}
               </div>
             ))}
           </div>
-          {status === "fetching" && (
-            <div className="mx-auto">Carregando...</div>
-          )}
-          {status === "done" && (
-            <div className="mx-auto">Não há mais posts para carregar</div>
-          )}
-          {status === "fetched" && (
-            <button
-              onClick={async () => {
-                currentPage.current = currentPage.current + 1;
-                setStatus("fetching");
-                await new Promise((resolve) => setTimeout(resolve, 1000));
-                refetchPosts();
-              }}
-            >
-              Carregar mais posts
-            </button>
-          )}
+          <button
+            onClick={async () => {
+              setCurrentPage((prev) => prev + 1);
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+              await refetchPosts();
+            }}
+          >
+            Carregar mais posts
+          </button>
         </div>
       </div>
     </div>

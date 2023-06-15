@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import database from "../database.js";
 import userService from "../User/userService.js";
 const postCollection = database.collection("post");
@@ -84,14 +85,14 @@ postService.index = async (
 };
 postService.create = async (data) => {
   try {
-    const { _id, userId, text = "", imageSrc = "" } = data;
-    if (!_id || !userId) throw new Error("Missing _id or userId");
+    const { userId, text = "", imageSrc = "" } = data;
+    if (!userId) throw new Error("Missing _id or userId");
 
     const user = await userService.show(userId);
     if (!user) throw new Error("User not found");
 
     const post = {
-      _id,
+      _id: uuidv4(),
       userId,
       text,
       imageSrc,

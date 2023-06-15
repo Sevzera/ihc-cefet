@@ -8,7 +8,6 @@ import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
 
 export const EditProfileModal = ({ refetchData, closeModal }) => {
-  const queryClient = useQueryClient();
   const { userId } = useParams();
 
   const [data, setData] = React.useState({
@@ -19,12 +18,15 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
     password: "",
   });
 
-  const { mutate: updateUser } = useUpdateUser(userId, {
-    onSuccess: () => {
-      refetchData();
-      closeModal();
-    },
-  });
+  const { mutate: updateUser, isLoading: isUpdateUserLoading } = useUpdateUser(
+    userId,
+    {
+      onSuccess: () => {
+        refetchData();
+        closeModal();
+      },
+    }
+  );
   const { data: user } = useUser(userId, {
     onSuccess: (data) => {
       setData({
@@ -37,24 +39,28 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
     },
   });
 
-  const isButtonDisabled =
-    data.profilePictureSrc === user.profilePictureSrc &&
-    data.bannerImageSrc === user.bannerImageSrc &&
-    data.name === user.name &&
-    data.email === user.email &&
-    data.password === "";
+  const isInfoValid =
+    data.profilePictureSrc !== user.profilePictureSrc &&
+    data.bannerImageSrc !== user.bannerImageSrc &&
+    data.name &&
+    data.name !== user.name &&
+    data.email &&
+    data.email !== user.email &&
+    data.password &&
+    data.password !== "";
 
   return (
-    <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center">
-      <div className="max-w-[40%] rounded-lg bg-light-background p-8 shadow-2xl dark:bg-dark-background">
+    <div className="absolute z-50 flex h-10">
+      <div className="rounded-lg bg-light-background p-8 shadow-2xl dark:bg-dark-background">
         <div className="flex justify-between pb-6">
           <p className="text-3xl font-bold">Editar Perfil</p>
-          <IconButton
-            icon={<Icon.X size={24} />}
-            haveTooltip={false}
-            onClickFunction={() => closeModal()}
-            customButtonStyles="mx-0"
-          />
+          <div>
+            <IconButton
+              icon={<Icon.X size={24} />}
+              haveTooltip={false}
+              onClickFunction={() => closeModal()}
+            />
+          </div>
         </div>
         <div className="flex flex-col gap-5">
           <div className="flex flex-col items-center gap-2">
@@ -127,7 +133,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
             label="Atualizar"
             customStyles="w-1/2 p-2 bg-light-primary text-white dark:text-light-background enabled:hover:brightness-75 enabled:dark:hover:brightness-75"
             onClick={() => updateUser(data)}
-            disabled={isButtonDisabled}
+            disabled={isInfoValid || isUpdateUserLoading}
           />
         </div>
       </div>
