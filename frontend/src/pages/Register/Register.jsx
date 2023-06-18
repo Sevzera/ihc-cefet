@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 
 import * as Icon from "react-feather";
 import avatar from "../../assets/images/avatar.png";
@@ -76,7 +75,6 @@ export const Register = () => {
     createUser(
       {
         ...data,
-        _id: uuidv4(),
       },
       {
         onSuccess: () => {

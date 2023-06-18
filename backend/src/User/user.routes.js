@@ -6,6 +6,17 @@ const router = express.Router();
 
 router.use(decoder.parseUser);
 
+router.post("/login", async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await userService.login(data);
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    console.log("Error in userRoutes.login: ", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 router.get("/", async (req, res) => {
   try {
     const filters = req.query;

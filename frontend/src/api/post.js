@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useInfiniteQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import qs from "qs";
 
 const usePost = (id, options) => {
@@ -14,11 +14,16 @@ const usePost = (id, options) => {
 
 const usePosts = (filters, options) => {
   const {
+    userId,
     options: { page },
   } = filters;
   const stringifiedFilters = qs.stringify(filters);
   return useQuery(
-    ["posts", ...(page ? [page] : [])],
+    [
+      "posts",
+      ...(page ? [page] : []),
+      ...(typeof userId === "string" ? [userId] : []),
+    ],
     async () => {
       const response = await fetch(
         `http://localhost:1999/api/post?${stringifiedFilters}`
