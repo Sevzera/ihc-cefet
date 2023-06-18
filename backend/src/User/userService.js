@@ -1,8 +1,10 @@
 import database from "../database.js";
 import imgbbUploader from 'imgbb-uploader';
+import axios from "axios";
 const userCollection = database.collection("user");
 
 const userService = {};
+const imgBB_url = 'https://api.imgbb.com/1/upload'
 
 userService.show = async (id) => {
   try {
@@ -46,8 +48,8 @@ userService.create = async (data) => {
     } else {
       const imgbbOptions = {
         apiKey: "d800fef0297081cd154ac0a53179efe1",
-        imagePath: data.profilePictureSrc,
-        name: data._id + Date.now(),
+        base64string: data.profilePictureSrc,
+        name: Date.now() + data._id,
       }
 
       return imgbbUploader(imgbbOptions).then(async (response) => {
