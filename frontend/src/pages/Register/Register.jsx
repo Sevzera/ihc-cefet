@@ -18,10 +18,37 @@ export const Register = () => {
   const navigate = useNavigate();
 
   const [data, setData] = React.useState({
+    profilePictureSrc: "",
     name: "",
     email: "",
     password: "",
   });
+
+  function readFile(file) {
+    return new Promise((resolve) => {
+      if (file.size) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          resolve({
+            binary: file,
+            b64: e.target.result
+          })
+        }
+        reader.readAsDataURL(file);
+      }
+    })
+  }
+
+  const handleProfilePicture = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      selectedProfilePicture.src = URL.createObjectURL(file)
+      const imagePromise = readFile(file)
+      const image_64 = imagePromise.then((obj) => {
+        setData({ ...data, profilePictureSrc: obj.b64.split(",").pop() })
+      })
+    }
+  };
 
   const handleNameChange = (event) => {
     setData({ ...data, name: event.target.value });
@@ -34,6 +61,10 @@ export const Register = () => {
   const handlePasswordChange = (event) => {
     setData({ ...data, password: event.target.value });
   };
+
+  const handleBtnClick = () => {
+    inputFileRef.current.click();
+  }
 
   const [darkMode, setDarkMode] = useDarkMode();
   const handleDarkMode = () => {
@@ -80,7 +111,8 @@ export const Register = () => {
                 customButtonStyles="text-light-background bg-light-primary rounded-full"
               />
             </div>
-            <img src={avatar} alt="logo" className="object-contain p-3" />
+            <img id="selectedProfilePicture" src="#" alt="logo" className="object-contain p-3" />
+            <input type="file" name="file" onChange={handleProfilePicture} />
           </div>
           <div className="flex w-1/2 flex-col gap-2">
             <Input
