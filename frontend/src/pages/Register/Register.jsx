@@ -109,7 +109,7 @@ export const Register = () => {
                 customButtonStyles="text-light-background bg-light-primary rounded-full"
               />
             </div>
-            <img id="selectedProfilePicture" src="#" alt="logo" className="object-contain p-3" />
+            <img id="selectedProfilePicture" src={avatar} alt="logo" className="object-contain p-3" />
             <input type="file" name="file" onChange={handleProfilePicture} />
           </div>
           <div className="flex w-1/2 flex-col gap-2">

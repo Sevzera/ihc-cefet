@@ -101,7 +101,7 @@ userService.update = async (id, data) => {
     ) {
       const imgbbOptions = {
         apiKey: "d800fef0297081cd154ac0a53179efe1",
-        imagePath: data.profilePictureSrc,
+        base64string: data.profilePictureSrc,
         name: currentUserData._id + Date.now(),
       };
       newProfilePicture = await imgbbUploader(imgbbOptions)
@@ -117,7 +117,7 @@ userService.update = async (id, data) => {
     ) {
       const imgbbOptions = {
         apiKey: "d800fef0297081cd154ac0a53179efe1",
-        imagePath: data.bannerImageSrc,
+        base64string: data.bannerImageSrc,
         name: "banner_" + currentUserData._id + Date.now(),
       };
       newBanner = await imgbbUploader(imgbbOptions)
