@@ -44,7 +44,7 @@ export const Home = () => {
   let posts = buildPostFeed(currentPage);
 
   return (
-    <div className="h-full w-full overflow-auto py-10 ">
+    <div className="h-full w-full overflow-y-auto py-10 ">
       <div className="flex justify-center">
         <div className="flex w-3/4 flex-col gap-8">
           <div id="friend-list" className="flex w-full">

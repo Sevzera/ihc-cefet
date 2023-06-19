@@ -54,7 +54,7 @@ export const Profile = () => {
   const posts = buildPostFeed(currentPage, [userId]);
 
   return (
-    <div className="h-full w-full overflow-auto pb-10">
+    <div className="h-full w-full overflow-y-auto pb-10">
       {isMyProfile && isModalOpen && (
         <EditProfileModal
           refetchData={() => {

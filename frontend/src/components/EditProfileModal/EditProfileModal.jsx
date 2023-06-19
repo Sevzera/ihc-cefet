@@ -50,10 +50,10 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
     data.password !== "";
 
   return (
-    <div className="absolute z-50 flex h-10">
-      <div className="rounded-lg bg-light-background p-8 shadow-2xl dark:bg-dark-background">
-        <div className="flex justify-between pb-6">
-          <p className="text-3xl font-bold">Editar Perfil</p>
+    <div className="fixed z-50 flex h-full w-full items-center justify-center">
+      <div className="flex h-fit w-[50%] flex-col justify-center rounded-lg bg-light-background p-4 shadow-2xl dark:bg-dark-background">
+        <div className="flex justify-between pb-3">
+          <p className="text-2xl font-bold">Editar Perfil</p>
           <div>
             <IconButton
               icon={<Icon.X size={24} />}
@@ -62,10 +62,10 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
             />
           </div>
         </div>
-        <div className="flex flex-col gap-5">
-          <div className="flex flex-col items-center gap-2">
-            <label>Foto de Perfil</label>
-            <div className="relative w-1/5">
+        <div className="flex w-full justify-between">
+          <div className="flex w-2/5 flex-col items-center">
+            <label className="text-2xl">Foto de Perfil</label>
+            <div className="relative">
               <div className="absolute right-0">
                 <IconButton
                   icon={<Icon.HelpCircle size={24} />}
@@ -76,65 +76,73 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
               <img
                 src={data.profilePictureSrc}
                 alt="logo"
-                className="object-contain p-3"
+                className="object-contain p-1"
               />
             </div>
           </div>
-          <div className="flex flex-col items-center gap-2">
-            <label>Foto de Fundo</label>
-            <img
-              src={data.bannerImageSrc}
-              alt="banner"
-              className="object-contain p-3"
-            />
+          <div className="flex w-3/5 flex-col items-center">
+            <div className="h-[55%] w-full flex-col items-center">
+              <label className="text-2xl">Foto de Fundo</label>
+              <img
+                src={data.bannerImageSrc}
+                alt="banner"
+                className="object-contain p-1"
+              />
+            </div>
+            <div className="flex h-[45%] w-full justify-between p-1">
+              <div className="flex w-1/2 flex-col items-center justify-between pb-4">
+                <div className="flex w-5/6 flex-col">
+                  <label>Nome</label>
+                  <Input
+                    type="text"
+                    placeholder="Nome Completo"
+                    value={data.name}
+                    onChange={(e) => {
+                      setData({ ...data, name: e.target.value });
+                    }}
+                    name="name"
+                    customStyles={"w-full"}
+                  />
+                </div>
+                <div className="flex w-5/6 flex-col">
+                  <label>E-mail</label>
+                  <Input
+                    type="text"
+                    placeholder="Email"
+                    value={data.email}
+                    onChange={(e) => {
+                      setData({ ...data, email: e.target.value });
+                    }}
+                    name="email"
+                    customStyles={"w-full"}
+                  />
+                </div>
+              </div>
+              <div className="flex w-1/2 flex-col items-center justify-between pb-4">
+                <div className="flex w-5/6 flex-col">
+                  <label>Senha</label>
+                  <Input
+                    type="password"
+                    placeholder="Digite uma nova senha"
+                    value={data.password}
+                    onChange={(e) => {
+                      setData({ ...data, password: e.target.value });
+                    }}
+                    name="password"
+                    customStyles={"w-full"}
+                  />
+                </div>
+                <div className="flex w-5/6 justify-end">
+                  <Button
+                    label="Atualizar"
+                    customStyles="w-full p-2 bg-light-primary text-white dark:text-light-background enabled:hover:brightness-75 enabled:dark:hover:brightness-75"
+                    onClick={() => updateUser(data)}
+                    disabled={isInfoValid || isUpdateUserLoading}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <label>Nome</label>
-            <Input
-              type="text"
-              placeholder="Nome Completo"
-              value={data.name}
-              onChange={(e) => {
-                setData({ ...data, name: e.target.value });
-              }}
-              name="name"
-              customStyles={"w-full"}
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label>E-mail</label>
-            <Input
-              type="text"
-              placeholder="Email"
-              value={data.email}
-              onChange={(e) => {
-                setData({ ...data, email: e.target.value });
-              }}
-              name="email"
-              customStyles={"w-full"}
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label>Senha</label>
-            <Input
-              type="password"
-              placeholder="Digite uma nova senha"
-              value={data.password}
-              onChange={(e) => {
-                setData({ ...data, password: e.target.value });
-              }}
-              name="password"
-              customStyles={"w-full"}
-            />
-          </div>
-        </div>
-        <div className="flex justify-center pt-8">
-          <Button
-            label="Atualizar"
-            customStyles="w-1/2 p-2 bg-light-primary text-white dark:text-light-background enabled:hover:brightness-75 enabled:dark:hover:brightness-75"
-            onClick={() => updateUser(data)}
-            disabled={isInfoValid || isUpdateUserLoading}
-          />
         </div>
       </div>
     </div>
