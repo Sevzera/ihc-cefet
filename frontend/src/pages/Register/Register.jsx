@@ -102,7 +102,7 @@ export const Register = () => {
         </div>
         <div className="flex w-full flex-col items-center justify-center gap-5">
           <div className="relative w-1/5">
-            <div className="absolute right-0">
+            <div className="absolute right-1 -top-1">
               <IconButton
                 icon={<Icon.HelpCircle size={24} />}
                 tooltip="Selecione uma foto de perfil clicando na imagem"

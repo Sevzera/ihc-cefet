@@ -127,10 +127,16 @@ userService.update = async (id, data) => {
         .catch((error) => console.error(error));
     }
 
-    data.profilePictureSrc = newProfilePicture;
-    data.bannerImageSrc = newBanner;
+    const { password } = data;
+    const updatedData = {
+      ...data,
+      ...(password && { password: await bcrypt.hash(password, 10) }),
+      profilePictureSrc: newProfilePicture,
+      bannerImageSrc: newBanner,
+      updatedAt: Date.now(),
+    };
 
-    return userCollection.findOneAndUpdate({ _id: id }, { $set: data });
+    return userCollection.findOneAndUpdate({ _id: id }, { $set: updatedData });
   } catch (error) {
     console.log("Error in userService.update: ", error);
     throw error;

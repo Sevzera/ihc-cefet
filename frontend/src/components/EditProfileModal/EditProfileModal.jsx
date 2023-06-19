@@ -66,7 +66,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
           <div className="flex w-2/5 flex-col items-center">
             <label className="text-2xl">Foto de Perfil</label>
             <div className="relative">
-              <div className="absolute right-0">
+              <div className="absolute -top-1 right-1">
                 <IconButton
                   icon={<Icon.HelpCircle size={24} />}
                   tooltip="Selecione uma foto de perfil clicando na imagem"
@@ -81,7 +81,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
             </div>
           </div>
           <div className="flex w-3/5 flex-col items-center">
-            <div className="h-[55%] w-full flex-col items-center">
+            <div className="flex h-[55%] w-full flex-col items-center">
               <label className="text-2xl">Foto de Fundo</label>
               <img
                 src={data.bannerImageSrc}
@@ -90,21 +90,8 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
               />
             </div>
             <div className="flex h-[45%] w-full justify-between p-1">
-              <div className="flex w-1/2 flex-col items-center justify-between pb-4">
-                <div className="flex w-5/6 flex-col">
-                  <label>Nome</label>
-                  <Input
-                    type="text"
-                    placeholder="Nome Completo"
-                    value={data.name}
-                    onChange={(e) => {
-                      setData({ ...data, name: e.target.value });
-                    }}
-                    name="name"
-                    customStyles={"w-full"}
-                  />
-                </div>
-                <div className="flex w-5/6 flex-col">
+              <div className="flex w-1/2 flex-col items-center justify-between">
+                <div className="flex w-5/6 flex-col gap-2">
                   <label>E-mail</label>
                   <Input
                     type="text"
@@ -117,9 +104,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                     customStyles={"w-full"}
                   />
                 </div>
-              </div>
-              <div className="flex w-1/2 flex-col items-center justify-between pb-4">
-                <div className="flex w-5/6 flex-col">
+                <div className="flex w-5/6 flex-col gap-2">
                   <label>Senha</label>
                   <Input
                     type="password"
@@ -129,6 +114,21 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                       setData({ ...data, password: e.target.value });
                     }}
                     name="password"
+                    customStyles={"w-full"}
+                  />
+                </div>
+              </div>
+              <div className="flex w-1/2 flex-col items-center justify-between">
+                <div className="flex w-5/6 flex-col gap-2">
+                  <label>Nome</label>
+                  <Input
+                    type="text"
+                    placeholder="Nome Completo"
+                    value={data.name}
+                    onChange={(e) => {
+                      setData({ ...data, name: e.target.value });
+                    }}
+                    name="name"
                     customStyles={"w-full"}
                   />
                 </div>
