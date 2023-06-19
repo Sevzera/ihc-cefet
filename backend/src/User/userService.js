@@ -5,6 +5,7 @@ import imgbbUploader from "imgbb-uploader";
 const userCollection = database.collection("user");
 
 const userService = {};
+const imgBB_url = 'https://api.imgbb.com/1/upload'
 
 userService.login = async (credentials) => {
   try {
@@ -71,16 +72,14 @@ userService.create = async (data) => {
     } else {
       const imgbbOptions = {
         apiKey: "d800fef0297081cd154ac0a53179efe1",
-        imagePath: data.profilePictureSrc,
-        name: data._id + Date.now(),
-      };
+        base64string: data.profilePictureSrc,
+        name: Date.now() + data._id,
+      }
 
-      return imgbbUploader(imgbbOptions)
-        .then(async (response) => {
-          user.profilePictureSrc = response.url;
-          return userCollection.insertOne(user);
-        })
-        .catch((error) => console.error(error));
+      return imgbbUploader(imgbbOptions).then(async (response) => {
+        user.profilePictureSrc = response.url;
+        return userCollection.insertOne(user)
+      }).catch((error) => console.error(error))
     }
   } catch (error) {
     console.log("Error in userService.create: ", error);
@@ -102,7 +101,7 @@ userService.update = async (id, data) => {
     ) {
       const imgbbOptions = {
         apiKey: "d800fef0297081cd154ac0a53179efe1",
-        imagePath: data.profilePictureSrc,
+        base64string: data.profilePictureSrc,
         name: currentUserData._id + Date.now(),
       };
       newProfilePicture = await imgbbUploader(imgbbOptions)
@@ -118,7 +117,7 @@ userService.update = async (id, data) => {
     ) {
       const imgbbOptions = {
         apiKey: "d800fef0297081cd154ac0a53179efe1",
-        imagePath: data.bannerImageSrc,
+        base64string: data.bannerImageSrc,
         name: "banner_" + currentUserData._id + Date.now(),
       };
       newBanner = await imgbbUploader(imgbbOptions)
