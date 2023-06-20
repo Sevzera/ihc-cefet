@@ -9,6 +9,25 @@ import { useQueryClient } from "react-query";
 
 export const EditProfileModal = ({ refetchData, closeModal }) => {
   const { userId } = useParams();
+  const [profilePicture_URL, setProfilePicture_URL] = React.useState();
+  const [bannerImage_URL, setBannerImage_URL] = React.useState();
+  const [selectedProfilePicture, setSelectedProfilePicture] = React.useState();
+  const [selectedBannerImage, setSelectedBannerImage] = React.useState();
+
+  function readFile(file) {
+    return new Promise((resolve) => {
+      if (file.size) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          resolve({
+            binary: file,
+            b64: e.target.result
+          })
+        }
+        reader.readAsDataURL(file);
+      }
+    })
+  }
 
   const [data, setData] = React.useState({
     profilePictureSrc: "",
@@ -17,6 +36,28 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
     email: "",
     password: "",
   });
+
+  const handleProfilePicture = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setProfilePicture_URL(URL.createObjectURL(file));
+      const imagePromise = readFile(file)
+      imagePromise.then((obj) => {
+        setSelectedProfilePicture(obj.b64.split(",").pop());
+      })
+    }
+  };
+
+  const handleBannerImage = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setBannerImage_URL(URL.createObjectURL(file));
+      const imagePromise = readFile(file)
+      imagePromise.then((obj) => {
+        setSelectedBannerImage(obj.b64.split(",").pop());
+      })
+    }
+  };
 
   const { mutate: updateUser, isLoading: isUpdateUserLoading } = useUpdateUser(
     userId,
@@ -27,11 +68,12 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
       },
     }
   );
+
   const { data: user } = useUser(userId, {
     onSuccess: (data) => {
       setData({
-        profilePictureSrc: data.profilePictureSrc,
-        bannerImageSrc: data.bannerImageSrc,
+        profilePictureSrc: selectedProfilePicture,
+        bannerImageSrc: selectedBannerImage,
         name: data.name,
         email: data.email,
         password: "",
@@ -39,9 +81,9 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
     },
   });
 
+  const currentUserInfo = useUser(userId);
+
   const isInfoValid =
-    data.profilePictureSrc !== user.profilePictureSrc &&
-    data.bannerImageSrc !== user.bannerImageSrc &&
     data.name &&
     data.name !== user.name &&
     data.email &&
@@ -73,22 +115,16 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                   customButtonStyles="text-light-background bg-light-primary rounded-full"
                 />
               </div>
-              <img
-                src={data.profilePictureSrc}
-                alt="logo"
-                className="object-contain p-1"
-              />
+              { !profilePicture_URL ? <img src={currentUserInfo.data.profilePictureSrc} alt="logo" className="object-fill h-full w-full border border-black mb-2" /> : <img src={profilePicture_URL} alt="logo" className="object-fill h-full w-full border border-black mb-2" /> }
+              <input type="file" name="file" onChange={handleProfilePicture} accept="image/jpeg, image/png, image/gif"/>
             </div>
           </div>
           <div className="flex w-3/5 flex-col items-center">
-            <div className="flex h-[55%] w-full flex-col items-center">
+            <div className="flex w-full flex-col items-center">
               <label className="text-2xl">Foto de Fundo</label>
-              <img
-                src={data.bannerImageSrc}
-                alt="banner"
-                className="object-contain p-1"
-              />
+              { !bannerImage_URL ? <img src={currentUserInfo.data.bannerImageSrc} alt="logo" className="object-fill h-24 w-96 border border-black mb-2" /> : <img src={bannerImage_URL} alt="logo" className="object-fill h-24 w-96 border border-black mb-2" /> }
             </div>
+            <input type="file" name="file" onChange={handleBannerImage} accept="image/jpeg, image/png, image/gif"/>
             <div className="flex h-[45%] w-full justify-between p-1">
               <div className="flex w-1/2 flex-col items-center justify-between">
                 <div className="flex w-5/6 flex-col gap-2">
@@ -98,7 +134,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                     placeholder="Email"
                     value={data.email}
                     onChange={(e) => {
-                      setData({ ...data, email: e.target.value });
+                      setData({...data, email: e.target.value });
                     }}
                     name="email"
                     customStyles={"w-full"}
@@ -111,7 +147,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                     placeholder="Digite uma nova senha"
                     value={data.password}
                     onChange={(e) => {
-                      setData({ ...data, password: e.target.value });
+                      setData({...data, password: e.target.value });
                     }}
                     name="password"
                     customStyles={"w-full"}
@@ -126,7 +162,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                     placeholder="Nome Completo"
                     value={data.name}
                     onChange={(e) => {
-                      setData({ ...data, name: e.target.value });
+                      setData({...data, name: e.target.value });
                     }}
                     name="name"
                     customStyles={"w-full"}

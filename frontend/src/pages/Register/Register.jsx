@@ -111,7 +111,7 @@ export const Register = () => {
               />
             </div>
             { data.profilePictureSrc === "" ? <img src={avatar} alt="logo" className="object-contain p-3" /> : <img src={selectedProfilePicture} alt="logo" className="object-contain p-3" /> }
-            <input type="file" name="file" onChange={handleProfilePicture} />
+            <input type="file" name="file" onChange={handleProfilePicture} accept="image/jpeg, image/png, image/gif"/>
           </div>
           <div className="flex w-1/2 flex-col gap-2">
             <Input

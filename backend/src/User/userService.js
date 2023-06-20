@@ -92,6 +92,7 @@ userService.update = async (id, data) => {
     if (!id) throw new Error("Missing id");
 
     const currentUserData = await userCollection.findOne({ _id: id });
+
     let newProfilePicture = currentUserData.profilePictureSrc;
     let newBanner = currentUserData.bannerImageSrc;
 
