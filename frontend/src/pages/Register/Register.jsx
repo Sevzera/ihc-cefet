@@ -15,6 +15,7 @@ import { useCreateUser } from "../../api/user";
 export const Register = () => {
   const { mutate: createUser } = useCreateUser();
   const navigate = useNavigate();
+  const [selectedProfilePicture, setSelectedProfilePicture] = React.useState();
 
   const [data, setData] = React.useState({
     profilePictureSrc: "",
@@ -41,7 +42,7 @@ export const Register = () => {
   const handleProfilePicture = (event) => {
     const file = event.target.files[0];
     if (file) {
-      selectedProfilePicture.src = URL.createObjectURL(file)
+      setSelectedProfilePicture(URL.createObjectURL(file));
       const imagePromise = readFile(file)
       const image_64 = imagePromise.then((obj) => {
         setData({ ...data, profilePictureSrc: obj.b64.split(",").pop() })
@@ -109,7 +110,7 @@ export const Register = () => {
                 customButtonStyles="text-light-background bg-light-primary rounded-full"
               />
             </div>
-            <img id="selectedProfilePicture" src={avatar} alt="logo" className="object-contain p-3" />
+            { data.profilePictureSrc === "" ? <img src={avatar} alt="logo" className="object-contain p-3" /> : <img src={selectedProfilePicture} alt="logo" className="object-contain p-3" /> }
             <input type="file" name="file" onChange={handleProfilePicture} />
           </div>
           <div className="flex w-1/2 flex-col gap-2">
