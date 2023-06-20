@@ -39,7 +39,7 @@ export const Search = () => {
   };
 
   return (
-    <div className="h-full w-full overflow-auto p-5">
+    <div className="h-full w-full overflow-y-auto p-5">
       <div className="flex flex-col items-center justify-center gap-8">
         <div className="flex w-3/4 flex-row gap-2">
           <Input
