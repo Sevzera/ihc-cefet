@@ -1,9 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
 import database from "../database.js";
 import userService from "../User/userService.js";
+import imgbbUploader from "imgbb-uploader";
 const postCollection = database.collection("post");
 
 const postService = {};
+const imgBB_url = 'https://api.imgbb.com/1/upload'
 
 postService.show = async (
   id,
@@ -105,6 +107,21 @@ postService.create = async (data) => {
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
+
+    if (data.imageSrc == undefined) {
+      return await postCollection.insertOne(post)
+    } else {
+      const imgbbOptions = {
+        apiKey: "d800fef0297081cd154ac0a53179efe1",
+        base64string: data.imageSrc,
+        name: Date.now() + data._id + "_post",
+      }
+
+      return imgbbUploader(imgbbOptions).then(async (response) => {
+        post.imageSrc = response.url;
+        return await postCollection.insertOne(post)
+      }).catch((error) => console.error(error))
+    }
 
     return await postCollection.insertOne(post);
   } catch (error) {

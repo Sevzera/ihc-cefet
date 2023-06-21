@@ -128,10 +128,14 @@ userService.update = async (id, data) => {
         .catch((error) => console.error(error));
     }
 
-    const { password } = data;
+    if(data.password == ""){
+      data.password = currentUserData.password
+    } else {
+      data.password = await bcrypt.hash(data.password, 10)
+    }
+
     const updatedData = {
       ...data,
-      ...(password && { password: await bcrypt.hash(password, 10) }),
       profilePictureSrc: newProfilePicture,
       bannerImageSrc: newBanner,
       updatedAt: Date.now(),
