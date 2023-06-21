@@ -84,6 +84,10 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
   const currentUserInfo = useUser(userId);
 
   const isInfoValid =
+    data.profilePictureSrc &&
+    data.profilePictureSrc !== user.profilePictureSrc &&
+    data.bannerImageSrc &&
+    data.bannerImageSrc !== user.bannerImageSrc &&
     data.name &&
     data.name !== user.name &&
     data.email &&
@@ -115,16 +119,20 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                   customButtonStyles="text-light-background bg-light-primary rounded-full"
                 />
               </div>
-              { !profilePicture_URL ? <img src={currentUserInfo.data.profilePictureSrc} alt="logo" className="object-fill h-full w-full border border-black mb-2" /> : <img src={profilePicture_URL} alt="logo" className="object-fill h-full w-full border border-black mb-2" /> }
-              <input type="file" name="file" onChange={handleProfilePicture} accept="image/jpeg, image/png, image/gif"/>
+              <label for="dropzone-profile-pic">
+                { !profilePicture_URL ? <img src={currentUserInfo.data.profilePictureSrc} alt="logo" className="rounded border border-gray-500 hover:cursor-pointer h-72 w-80" /> : <img src={profilePicture_URL} alt="logo" className="rounded border border-gray-500 hover:cursor-pointer h-72 w-80" /> }
+                <input type="file" id="dropzone-profile-pic" onChange={handleProfilePicture} accept="image/jpeg, image/png, image/gif" class="hidden"/>
+              </label>
             </div>
           </div>
           <div className="flex w-3/5 flex-col items-center">
             <div className="flex w-full flex-col items-center">
               <label className="text-2xl">Foto de Fundo</label>
-              { !bannerImage_URL ? <img src={currentUserInfo.data.bannerImageSrc} alt="logo" className="object-fill h-24 w-96 border border-black mb-2" /> : <img src={bannerImage_URL} alt="logo" className="object-fill h-24 w-96 border border-black mb-2" /> }
+              <label for="dropzone-banner">
+                { !bannerImage_URL ? <img src={currentUserInfo.data.bannerImageSrc} alt="logo" className="object-fill h-24 w-96 border border-gray-500 hover:cursor-pointer mb-4" /> : <img src={bannerImage_URL} alt="logo" className="object-fill h-24 w-96 border border-gray-500 hover:cursor-pointer mb-4" /> }
+                <input type="file" id="dropzone-banner" onChange={handleBannerImage} accept="image/jpeg, image/png, image/gif" class="hidden"/>
+              </label>
             </div>
-            <input type="file" name="file" onChange={handleBannerImage} accept="image/jpeg, image/png, image/gif"/>
             <div className="flex h-[45%] w-full justify-between p-1">
               <div className="flex w-1/2 flex-col items-center justify-between">
                 <div className="flex w-5/6 flex-col gap-2">

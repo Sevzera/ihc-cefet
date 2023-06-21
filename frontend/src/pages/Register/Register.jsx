@@ -110,8 +110,10 @@ export const Register = () => {
                 customButtonStyles="text-light-background bg-light-primary rounded-full"
               />
             </div>
-            { data.profilePictureSrc === "" ? <img src={avatar} alt="logo" className="object-contain p-3" /> : <img src={selectedProfilePicture} alt="logo" className="object-contain p-3" /> }
-            <input type="file" name="file" onChange={handleProfilePicture} accept="image/jpeg, image/png, image/gif"/>
+            <label for="dropzone-file">
+              { data.profilePictureSrc === "" ? <img src={avatar} alt="logo" className="border border-gray-400 hover:cursor-pointer h-56 w-72" /> : <img src={selectedProfilePicture} alt="logo" className="border border-gray-400 hover:cursor-pointer h-56 w-72"/> }
+              <input type="file" id="dropzone-file" onChange={handleProfilePicture} accept="image/jpeg, image/png, image/gif" class="hidden"/>
+            </label>
           </div>
           <div className="flex w-1/2 flex-col gap-2">
             <Input

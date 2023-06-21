@@ -67,7 +67,7 @@ export const Profile = () => {
       <div id="main-profile" className="pb-14">
         <img
           id="background-image"
-          className="h-80 w-full"
+          className="h-80 w-full border border-light-secondary dark:border-dark-secondary"
           src={user.bannerImageSrc}
           alt={user.name}
         />

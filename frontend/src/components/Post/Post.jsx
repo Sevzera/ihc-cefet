@@ -85,11 +85,11 @@ export const Post = ({ post }) => {
         <img
           src={post.user.profilePictureSrc}
           alt="profile picture"
-          className="h-16 w-16 border-2 border-black object-contain"
+          className="object-fill h-16 w-16 border border-black object-contain"
         />
         <div className="flex w-full flex-col">
-          <h1>{post.user.name}</h1>
-          <h2>{date}</h2>
+          <h1 className="font-extrabold text-xl">{post.user.name}</h1>
+          <h2 className="text-sm">{date}</h2>
         </div>
       </div>
       <div
@@ -114,7 +114,7 @@ export const Post = ({ post }) => {
           <img
             src={post.imageSrc}
             alt="post"
-            className="w-1/4 object-contain p-4"
+            className="w-1/4 mx-auto mb-5 border border-gray-400"
           />
         )}
       </div>
