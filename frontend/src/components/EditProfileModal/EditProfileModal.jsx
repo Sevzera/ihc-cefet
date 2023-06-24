@@ -21,12 +21,12 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
         reader.onload = (e) => {
           resolve({
             binary: file,
-            b64: e.target.result
-          })
-        }
+            b64: e.target.result,
+          });
+        };
         reader.readAsDataURL(file);
       }
-    })
+    });
   }
 
   const [data, setData] = React.useState({
@@ -41,10 +41,10 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
     const file = event.target.files[0];
     if (file) {
       setProfilePicture_URL(URL.createObjectURL(file));
-      const imagePromise = readFile(file)
+      const imagePromise = readFile(file);
       imagePromise.then((obj) => {
         setSelectedProfilePicture(obj.b64.split(",").pop());
-      })
+      });
     }
   };
 
@@ -52,10 +52,10 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
     const file = event.target.files[0];
     if (file) {
       setBannerImage_URL(URL.createObjectURL(file));
-      const imagePromise = readFile(file)
+      const imagePromise = readFile(file);
       imagePromise.then((obj) => {
         setSelectedBannerImage(obj.b64.split(",").pop());
-      })
+      });
     }
   };
 
@@ -111,7 +111,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
         <div className="flex w-full justify-between">
           <div className="flex w-2/5 flex-col items-center">
             <label className="text-2xl">Foto de Perfil</label>
-            <div className="relative">
+            <div className="relative w-3/5">
               <div className="absolute -top-1 right-1">
                 <IconButton
                   icon={<Icon.HelpCircle size={24} />}
@@ -119,9 +119,27 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                   customButtonStyles="text-light-background bg-light-primary rounded-full"
                 />
               </div>
-              <label for="dropzone-profile-pic">
-                { !profilePicture_URL ? <img src={currentUserInfo.data.profilePictureSrc} alt="logo" className="rounded border border-gray-500 hover:cursor-pointer h-72 w-80" /> : <img src={profilePicture_URL} alt="logo" className="rounded border border-gray-500 hover:cursor-pointer h-72 w-80" /> }
-                <input type="file" id="dropzone-profile-pic" onChange={handleProfilePicture} accept="image/jpeg, image/png, image/gif" class="hidden"/>
+              <label htmlFor="dropzone-profile-pic" className="w-full">
+                {!profilePicture_URL ? (
+                  <img
+                    src={currentUserInfo.data.profilePictureSrc}
+                    alt="logo"
+                    className="w-full rounded border border-gray-500 object-contain hover:cursor-pointer"
+                  />
+                ) : (
+                  <img
+                    src={profilePicture_URL}
+                    alt="logo"
+                    className="w-full rounded border border-gray-500 object-contain hover:cursor-pointer"
+                  />
+                )}
+                <input
+                  type="file"
+                  id="dropzone-profile-pic"
+                  onChange={handleProfilePicture}
+                  accept="image/jpeg, image/png, image/gif"
+                  class="hidden"
+                />
               </label>
             </div>
           </div>
@@ -129,8 +147,26 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
             <div className="flex w-full flex-col items-center">
               <label className="text-2xl">Foto de Fundo</label>
               <label for="dropzone-banner">
-                { !bannerImage_URL ? <img src={currentUserInfo.data.bannerImageSrc} alt="logo" className="object-fill h-24 w-96 border border-gray-500 hover:cursor-pointer mb-4" /> : <img src={bannerImage_URL} alt="logo" className="object-fill h-24 w-96 border border-gray-500 hover:cursor-pointer mb-4" /> }
-                <input type="file" id="dropzone-banner" onChange={handleBannerImage} accept="image/jpeg, image/png, image/gif" class="hidden"/>
+                {!bannerImage_URL ? (
+                  <img
+                    src={currentUserInfo.data.bannerImageSrc}
+                    alt="logo"
+                    className="mb-4 h-24 w-96 border border-gray-500 object-fill hover:cursor-pointer"
+                  />
+                ) : (
+                  <img
+                    src={bannerImage_URL}
+                    alt="logo"
+                    className="mb-4 h-24 w-96 border border-gray-500 object-fill hover:cursor-pointer"
+                  />
+                )}
+                <input
+                  type="file"
+                  id="dropzone-banner"
+                  onChange={handleBannerImage}
+                  accept="image/jpeg, image/png, image/gif"
+                  class="hidden"
+                />
               </label>
             </div>
             <div className="flex h-[45%] w-full justify-between p-1">
@@ -142,7 +178,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                     placeholder="Email"
                     value={data.email}
                     onChange={(e) => {
-                      setData({...data, email: e.target.value });
+                      setData({ ...data, email: e.target.value });
                     }}
                     name="email"
                     customStyles={"w-full"}
@@ -155,7 +191,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                     placeholder="Digite uma nova senha"
                     value={data.password}
                     onChange={(e) => {
-                      setData({...data, password: e.target.value });
+                      setData({ ...data, password: e.target.value });
                     }}
                     name="password"
                     customStyles={"w-full"}
@@ -170,7 +206,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                     placeholder="Nome Completo"
                     value={data.name}
                     onChange={(e) => {
-                      setData({...data, name: e.target.value });
+                      setData({ ...data, name: e.target.value });
                     }}
                     name="name"
                     customStyles={"w-full"}

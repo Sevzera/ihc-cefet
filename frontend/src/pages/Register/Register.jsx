@@ -31,22 +31,22 @@ export const Register = () => {
         reader.onload = (e) => {
           resolve({
             binary: file,
-            b64: e.target.result
-          })
-        }
+            b64: e.target.result,
+          });
+        };
         reader.readAsDataURL(file);
       }
-    })
+    });
   }
 
   const handleProfilePicture = (event) => {
     const file = event.target.files[0];
     if (file) {
       setSelectedProfilePicture(URL.createObjectURL(file));
-      const imagePromise = readFile(file)
+      const imagePromise = readFile(file);
       const image_64 = imagePromise.then((obj) => {
-        setData({ ...data, profilePictureSrc: obj.b64.split(",").pop() })
-      })
+        setData({ ...data, profilePictureSrc: obj.b64.split(",").pop() });
+      });
     }
   };
 
@@ -64,7 +64,7 @@ export const Register = () => {
 
   const handleBtnClick = () => {
     inputFileRef.current.click();
-  }
+  };
 
   const [darkMode, setDarkMode] = useDarkMode();
   const handleDarkMode = () => {
@@ -103,16 +103,34 @@ export const Register = () => {
         </div>
         <div className="flex w-full flex-col items-center justify-center gap-5">
           <div className="relative w-1/5">
-            <div className="absolute right-1 -top-1">
+            <div className="absolute -top-1 right-1">
               <IconButton
                 icon={<Icon.HelpCircle size={24} />}
                 tooltip="Selecione uma foto de perfil clicando na imagem"
                 customButtonStyles="text-light-background bg-light-primary rounded-full"
               />
             </div>
-            <label for="dropzone-file">
-              { data.profilePictureSrc === "" ? <img src={avatar} alt="logo" className="border border-gray-400 hover:cursor-pointer h-56 w-72" /> : <img src={selectedProfilePicture} alt="logo" className="border border-gray-400 hover:cursor-pointer h-56 w-72"/> }
-              <input type="file" id="dropzone-file" onChange={handleProfilePicture} accept="image/jpeg, image/png, image/gif" class="hidden"/>
+            <label htmlFor="dropzone-file" className="w-full">
+              {data.profilePictureSrc === "" ? (
+                <img
+                  src={avatar}
+                  alt="logo"
+                  className="w-full border border-gray-400 object-contain hover:cursor-pointer"
+                />
+              ) : (
+                <img
+                  src={selectedProfilePicture}
+                  alt="logo"
+                  className="w-full border border-gray-400 object-contain hover:cursor-pointer"
+                />
+              )}
+              <input
+                type="file"
+                id="dropzone-file"
+                onChange={handleProfilePicture}
+                accept="image/jpeg, image/png, image/gif"
+                className="hidden"
+              />
             </label>
           </div>
           <div className="flex w-1/2 flex-col gap-2">
