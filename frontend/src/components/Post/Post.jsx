@@ -1,14 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "react-query";
 
 import * as Icon from "react-feather";
+import { InsideLinks } from "../../utils";
 import { IconButton } from "../IconButton";
 import { CommentTextArea } from "../CommentTextArea";
 import { Button } from "../Button";
 import { usePost, useUpdatePost } from "../../api/post";
 
-import { useQueryClient } from "react-query";
-
 export const Post = ({ post }) => {
+  const navigate = useNavigate();
+
   const { mutate: updatePost, isLoading: isUpdatePostLoading } = useUpdatePost(
     post._id
   );
@@ -19,6 +22,7 @@ export const Post = ({ post }) => {
   const [commentText, setCommentText] = React.useState("");
 
   const isPostLiked = post.likes.includes(localUser._id);
+
   const onClickLikePost = () => {
     const newLikes = isPostLiked
       ? post.likes.filter((userId) => userId !== localUser._id)
@@ -34,6 +38,7 @@ export const Post = ({ post }) => {
       }
     );
   };
+
   const onClickComment = () => {
     updatePost(
       {
@@ -54,6 +59,7 @@ export const Post = ({ post }) => {
       }
     );
   };
+
   const onClickLikeComment = (isCommentLiked, index) => {
     const newComments = post.comments.map((comment, localIndex) => {
       if (localIndex === index) {
@@ -79,9 +85,17 @@ export const Post = ({ post }) => {
     );
   };
 
+  const onClickUser = (user) => {
+    navigate(`${InsideLinks.userProfile}/${user._id}`);
+  };
+
   return (
     <div className="h-fit w-full">
-      <div id="user" className="flex h-fit w-full flex-row items-center gap-2">
+      <div
+        id="user"
+        className="flex h-fit w-full cursor-pointer flex-row items-center gap-2"
+        onClick={() => onClickUser(post.user)}
+      >
         <img
           src={post.user.profilePictureSrc}
           alt="profile picture"
@@ -142,7 +156,8 @@ export const Post = ({ post }) => {
           return (
             <div
               key={`comment-${index}`}
-              className="flex h-fit w-full flex-col items-center pl-4 pt-2"
+              className="flex h-fit w-full cursor-pointer flex-col items-center pl-4 pt-2"
+              onClick={() => onClickUser(comment.user)}
             >
               <div
                 id={`user-${index}`}

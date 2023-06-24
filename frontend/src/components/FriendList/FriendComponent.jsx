@@ -5,7 +5,7 @@ export const FriendComponent = ({ friends, start, end, onClick }) => {
     if (index >= start && index < end) {
       return (
         <div
-          className="flex flex-col items-center justify-center hover:brightness-75"
+          className="flex cursor-pointer flex-col items-center justify-center hover:brightness-75"
           key={`friend-${friend._id}`}
           onClick={() => onClick(friend)}
         >
