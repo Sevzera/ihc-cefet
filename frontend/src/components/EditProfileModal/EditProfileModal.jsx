@@ -97,7 +97,10 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
 
   return (
     <div className="fixed z-50 flex h-full w-full items-center justify-center">
-      <div className="flex h-fit w-[80%] flex-col justify-center rounded-lg bg-light-background p-4 shadow-2xl dark:bg-dark-background md:w-[70%] 2xl:w-[50%]">
+      <div
+        className="flex h-fit w-[80%] flex-col justify-center rounded-lg border border-dark-background bg-light-background p-4 shadow-2xl 
+      dark:border-light-background dark:bg-dark-background md:w-[70%] 2xl:w-[50%]"
+      >
         <div className="flex justify-between pb-3">
           <p className="text-2xl font-bold">Editar Perfil</p>
           <div>

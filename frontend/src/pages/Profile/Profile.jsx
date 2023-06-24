@@ -64,80 +64,82 @@ export const Profile = () => {
           closeModal={() => setIsModalOpen(false)}
         />
       )}
-      <div id="main-profile" className="pb-14">
-        <img
-          id="background-image"
-          className="h-80 w-full border border-light-secondary dark:border-dark-secondary"
-          src={user.bannerImageSrc}
-          alt={user.name}
-        />
-        <div className="mx-32 -mt-44 flex items-end gap-5">
+      <div className={`${isModalOpen ? "blur-xl" : "blur-0"}`}>
+        <div id="main-profile" className="pb-14">
           <img
-            id="profile-picture"
-            className="h-64 w-64 rounded-lg border-4 border-light-secondary shadow-2xl dark:border-dark-secondary object-fill"
-            src={user.profilePictureSrc}
+            id="background-image"
+            className="h-80 w-full border border-light-secondary dark:border-dark-secondary"
+            src={user.bannerImageSrc}
             alt={user.name}
           />
-          <div className="flex h-20 items-center gap-5">
-            <p className="my-auto text-6xl font-bold">{user.name}</p>
-            {isMyProfile ? (
-              <IconButton
-                icon={<Icon.Edit size={24} />}
-                haveTooltip={false}
-                onClickFunction={() => setIsModalOpen(true)}
-              />
-            ) : isMyFriend ? (
-              <IconButton
-                icon={<Icon.MinusCircle size={24} />}
-                tooltip="Remover Amigo"
-                colorOnHover={"hover:text-red-700"}
-                onClickFunction={() => console.log("remove", userId)}
-              />
-            ) : (
-              <IconButton
-                icon={<Icon.PlusCircle size={24} />}
-                tooltip="Adicionar Amigo"
-                onClickFunction={() => console.log("add", userId)}
-              />
-            )}
+          <div className="mx-32 -mt-44 flex items-end gap-5">
+            <img
+              id="profile-picture"
+              className="h-64 w-64 rounded-lg border-4 border-light-secondary shadow-2xl dark:border-dark-secondary object-fill"
+              src={user.profilePictureSrc}
+              alt={user.name}
+            />
+            <div className="flex h-20 items-center gap-5">
+              <p className="my-auto text-6xl font-bold">{user.name}</p>
+              {isMyProfile ? (
+                <IconButton
+                  icon={<Icon.Edit size={24} />}
+                  haveTooltip={false}
+                  onClickFunction={() => setIsModalOpen(true)}
+                />
+              ) : isMyFriend ? (
+                <IconButton
+                  icon={<Icon.MinusCircle size={24} />}
+                  tooltip="Remover Amigo"
+                  colorOnHover={"hover:text-red-700"}
+                  onClickFunction={() => console.log("remove", userId)}
+                />
+              ) : (
+                <IconButton
+                  icon={<Icon.PlusCircle size={24} />}
+                  tooltip="Adicionar Amigo"
+                  onClickFunction={() => console.log("add", userId)}
+                />
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="flex justify-center">
-        <div className="flex w-3/4 flex-col gap-8">
-          <div id="friend-list" className="flex w-full">
-            <FriendList friends={friends} />
-          </div>
-          {isMyProfile && (
-            <div id="create-post" className="flex w-full">
-              <CreatePost icon={<Icon.Image size={24} />} size={"w-full"} />
+        <div className="flex justify-center">
+          <div className="flex w-3/4 flex-col gap-8">
+            <div id="friend-list" className="flex w-full">
+              <FriendList friends={friends} />
             </div>
-          )}
-          <div
-            id="posts"
-            className="flex w-full flex-col gap-5 rounded-b-lg rounded-t-lg bg-light-background p-2 dark:bg-dark-background"
-          >
-            {posts.map((post, index) => (
-              <div
-                className="flex h-fit w-full flex-col gap-5"
-                key={`post-${post._id}`}
-              >
-                <Post post={post} />
-                {posts.length > 1 && index < posts.length - 1 && (
-                  <HorizontalDivider />
-                )}
+            {isMyProfile && (
+              <div id="create-post" className="flex w-full">
+                <CreatePost icon={<Icon.Image size={24} />} size={"w-full"} />
               </div>
-            ))}
+            )}
+            <div
+              id="posts"
+              className="flex w-full flex-col gap-5 rounded-b-lg rounded-t-lg bg-light-background p-2 dark:bg-dark-background"
+            >
+              {posts.map((post, index) => (
+                <div
+                  className="flex h-fit w-full flex-col gap-5"
+                  key={`post-${post._id}`}
+                >
+                  <Post post={post} />
+                  {posts.length > 1 && index < posts.length - 1 && (
+                    <HorizontalDivider />
+                  )}
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={async () => {
+                setCurrentPage((prev) => prev + 1);
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+                await refetchPosts();
+              }}
+            >
+              Carregar mais posts
+            </button>
           </div>
-          <button
-            onClick={async () => {
-              setCurrentPage((prev) => prev + 1);
-              await new Promise((resolve) => setTimeout(resolve, 1000));
-              await refetchPosts();
-            }}
-          >
-            Carregar mais posts
-          </button>
         </div>
       </div>
     </div>
