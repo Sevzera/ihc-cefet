@@ -24,7 +24,7 @@ export const Input = ({
 
   return (
     <div
-      className={`flex h-10 flex-row items-center rounded-lg border-2 border-input-stroke border-opacity-[7%] 
+      className={`flex h-10 flex-row items-center rounded-lg border-2 border-input-stroke border-opacity-[20%] 
         bg-light-inputFill focus-within:border-light-primary dark:bg-dark-inputFill ${customStyles}`}
     >
       {icon && (
