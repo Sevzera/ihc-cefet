@@ -5,7 +5,7 @@ export const IconButton = ({
   icon,
   tooltip = "tooltip 💡",
   haveTooltip = true,
-  colorOnHover = "hover:text-dark-background hover:dark:text-light-background",
+  colorOnHover = "",
   onClickFunction,
   disabled = false,
   customButtonStyles = "",

@@ -97,7 +97,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
 
   return (
     <div className="fixed z-50 flex h-full w-full items-center justify-center">
-      <div className="flex h-fit w-[50%] flex-col justify-center rounded-lg bg-light-background p-4 shadow-2xl dark:bg-dark-background">
+      <div className="flex h-fit w-[50%] flex-col justify-center rounded-lg border-2 border-light-secondary bg-light-background p-4 shadow-2xl dark:border-dark-secondary dark:bg-dark-background">
         <div className="flex justify-between pb-3">
           <p className="text-2xl font-bold">Editar Perfil</p>
           <div>
@@ -151,13 +151,13 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                   <img
                     src={currentUserInfo.data.bannerImageSrc}
                     alt="logo"
-                    className="mb-4 h-24 w-96 border border-gray-500 object-fill hover:cursor-pointer"
+                    className="mb-4 w-full border border-gray-500 object-contain hover:cursor-pointer"
                   />
                 ) : (
                   <img
                     src={bannerImage_URL}
                     alt="logo"
-                    className="mb-4 h-24 w-96 border border-gray-500 object-fill hover:cursor-pointer"
+                    className="mb-4 w-full border border-gray-500 object-contain hover:cursor-pointer"
                   />
                 )}
                 <input

@@ -16,7 +16,8 @@ module.exports = {
           backgroundSecondary: "#D9D9D9",
           primary: "#2B8CE5",
           secondary: "#565656",
-          inputFill: "#E7E7E7",
+          // inputFill: "#E7E7E7",
+          inputFill: "#FFFFFF",
           commentFill: "#D9D9D9"
         },
         dark: {
@@ -24,7 +25,8 @@ module.exports = {
           backgroundSecondary: "#202020",
           primary: "#2B8CE5",
           secondary: "#DADADA",
-          inputFill: "#D9D9D9",
+          // inputFill: "#D9D9D9",
+          inputFill: "#FFFFFF",
           commentFill: "#D9D9D9"
         },
         input: {
