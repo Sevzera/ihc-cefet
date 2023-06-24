@@ -11,7 +11,10 @@ export const CommentTextArea = ({ writable, value, setValue }) => {
     <div className="flex w-full flex-col">
       <textarea
         id="comment-textarea"
-        className="resize-none rounded-lg bg-light-commentFill py-2 px-3 text-light-secondary placeholder-input-text focus:outline-none dark:bg-dark-commentFill"
+        className={`resize-none rounded-lg bg-light-commentFill py-2 px-3 
+          text-light-secondary placeholder-input-text focus:outline-none dark:bg-dark-commentFill
+          ${writable ? "focus:ring-2 focus:ring-light-primary" : "cursor-default"}`
+        }
         placeholder="Escreva um comentário..."
         readOnly={!writable}
         value={value}
