@@ -85,10 +85,10 @@ export const Post = ({ post }) => {
         <img
           src={post.user.profilePictureSrc}
           alt="profile picture"
-          className="object-fill h-16 w-16 border border-black object-contain"
+          className="h-16 w-16 border border-black object-fill"
         />
         <div className="flex w-full flex-col">
-          <h1 className="font-extrabold text-xl">{post.user.name}</h1>
+          <h1 className="text-xl font-extrabold">{post.user.name}</h1>
           <h2 className="text-sm">{date}</h2>
         </div>
       </div>
@@ -114,7 +114,7 @@ export const Post = ({ post }) => {
           <img
             src={post.imageSrc}
             alt="post"
-            className="w-1/4 mx-auto mb-5 border border-gray-400"
+            className="mx-auto mb-5 w-1/4 border border-gray-400"
           />
         )}
       </div>
@@ -151,7 +151,7 @@ export const Post = ({ post }) => {
                 <img
                   src={comment.user.profilePictureSrc}
                   alt="profile picture"
-                  className="h-8 w-8 border-2 border-black object-contain"
+                  className="h-8 w-8 border-2 border-black object-fill"
                 />
                 <div className="flex w-full flex-col">
                   <h1>{comment.user.name}</h1>

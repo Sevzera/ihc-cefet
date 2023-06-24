@@ -97,7 +97,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
 
   return (
     <div className="fixed z-50 flex h-full w-full items-center justify-center">
-      <div className="flex h-fit w-[50%] flex-col justify-center rounded-lg border-2 border-light-secondary bg-light-background p-4 shadow-2xl dark:border-dark-secondary dark:bg-dark-background">
+      <div className="flex h-fit w-[80%] flex-col justify-center rounded-lg bg-light-background p-4 shadow-2xl dark:bg-dark-background md:w-[70%] 2xl:w-[50%]">
         <div className="flex justify-between pb-3">
           <p className="text-2xl font-bold">Editar Perfil</p>
           <div>
@@ -108,10 +108,10 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
             />
           </div>
         </div>
-        <div className="flex w-full justify-between">
-          <div className="flex w-2/5 flex-col items-center">
+        <div className="flex w-full flex-col gap-2 lg:flex-row lg:gap-0">
+          <div className="flex flex-col items-center lg:w-2/5">
             <label className="text-2xl">Foto de Perfil</label>
-            <div className="relative w-3/5">
+            <div className="relative">
               <div className="absolute -top-1 right-1">
                 <IconButton
                   icon={<Icon.HelpCircle size={24} />}
@@ -119,18 +119,18 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                   customButtonStyles="text-light-background bg-light-primary rounded-full"
                 />
               </div>
-              <label htmlFor="dropzone-profile-pic" className="w-full">
+              <label for="dropzone-profile-pic">
                 {!profilePicture_URL ? (
                   <img
                     src={currentUserInfo.data.profilePictureSrc}
                     alt="logo"
-                    className="w-full rounded border border-gray-500 object-contain hover:cursor-pointer"
+                    className="h-72 w-80 rounded border border-gray-500 hover:cursor-pointer"
                   />
                 ) : (
                   <img
                     src={profilePicture_URL}
                     alt="logo"
-                    className="w-full rounded border border-gray-500 object-contain hover:cursor-pointer"
+                    className="h-72 w-80 rounded border border-gray-500 hover:cursor-pointer"
                   />
                 )}
                 <input
@@ -143,7 +143,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
               </label>
             </div>
           </div>
-          <div className="flex w-3/5 flex-col items-center">
+          <div className="flex flex-col items-center lg:w-3/5">
             <div className="flex w-full flex-col items-center">
               <label className="text-2xl">Foto de Fundo</label>
               <label for="dropzone-banner">
@@ -151,13 +151,13 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                   <img
                     src={currentUserInfo.data.bannerImageSrc}
                     alt="logo"
-                    className="mb-4 w-full border border-gray-500 object-contain hover:cursor-pointer"
+                    className="mb-4 h-24 w-96 border border-gray-500 object-fill hover:cursor-pointer"
                   />
                 ) : (
                   <img
                     src={bannerImage_URL}
                     alt="logo"
-                    className="mb-4 w-full border border-gray-500 object-contain hover:cursor-pointer"
+                    className="mb-4 h-24 w-96 border border-gray-500 object-fill hover:cursor-pointer"
                   />
                 )}
                 <input

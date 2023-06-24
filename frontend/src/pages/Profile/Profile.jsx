@@ -74,7 +74,7 @@ export const Profile = () => {
         <div className="mx-32 -mt-44 flex items-end gap-5">
           <img
             id="profile-picture"
-            className="h-64 w-64 rounded-lg border-4 border-light-secondary shadow-2xl dark:border-dark-secondary"
+            className="h-64 w-64 rounded-lg border-4 border-light-secondary shadow-2xl dark:border-dark-secondary object-fill"
             src={user.profilePictureSrc}
             alt={user.name}
           />

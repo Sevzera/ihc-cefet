@@ -61,6 +61,10 @@ export const CreatePost = ({ icon, size }) => {
   };
 
   const onClickPost = () => {
+    if (data.text === "") {
+      alert("O texto não pode estar vazio!");
+      return;
+    }
     createPost(data, {
       onSuccess: () => {
         queryClient.refetchQueries("posts");
