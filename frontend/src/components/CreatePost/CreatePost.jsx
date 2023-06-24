@@ -1,13 +1,14 @@
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import * as Icon from "react-feather";
+import { useQueryClient } from "react-query";
 
 import { Button } from "../../components/Button";
 import { IconButton } from "../../components/IconButton";
+import { HorizontalDivider } from "../../components/Divider";
 
 import { useCreatePost, usePost } from "../../api/post.js";
 
-import { useQueryClient } from "react-query";
 
 export const CreatePost = ({ icon, size }) => {
   const { mutate: createPost, isLoading: isCreatePostLoading } =
@@ -86,10 +87,11 @@ export const CreatePost = ({ icon, size }) => {
           className="peer w-full resize-none rounded-lg bg-light-inputFill bg-transparent px-3 py-2 text-light-secondary placeholder-input-text outline-none"
           onInput={(e) => onInputTextArea(e)}
         />
-        <div className="flex w-full items-center justify-center">
-          {selectedPostImage && (
-            <div className="w-1/5 p-1">
-              <div className="w-full relative">
+        {selectedPostImage && (
+          <div className="flex flex-col w-full items-center justify-center">
+            <HorizontalDivider customStyles={"w-full"}/>
+            <div className="w-1/5 p-2">
+              <div className="relative w-full">
                 <div className="absolute -top-1 right-1">
                   <IconButton
                     icon={<Icon.X size={16} />}
@@ -105,8 +107,8 @@ export const CreatePost = ({ icon, size }) => {
                 />
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
       <div className="flex flex-row">
         <div className="left-0 flex w-fit flex-row rounded-b-xl border-2 border-t-0 border-light-secondary bg-light-inputFill dark:border-dark-inputFill dark:bg-dark-inputFill">
