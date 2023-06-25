@@ -80,10 +80,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
     },
   });
 
-  const isNameValid = Boolean(data.name && data.name.length >= 3);
-  const isEmailValid = Boolean(data.email && data.email.includes("@"));
-  const isPasswordValid = Boolean(data.password && data.password.length >= 6);
-  const isInfoValid = isNameValid && isEmailValid && isPasswordValid;
+  const isInfoValid = Boolean(data.name && data.email && data.password);
 
   return (
     <div className="fixed z-50 flex h-full w-full items-center justify-center">
@@ -102,7 +99,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
           </div>
         </div>
         <div className="flex w-full flex-col gap-2 lg:flex-row lg:gap-0">
-          <div className="flex flex-col items-center lg:w-2/5">
+          <div className="flex h-full flex-col items-center lg:w-2/5">
             <label className="text-2xl">Foto de Perfil</label>
             <div className="relative">
               <div className="absolute -top-1 right-1">
@@ -136,21 +133,21 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
               </label>
             </div>
           </div>
-          <div className="flex flex-col items-center lg:w-3/5">
-            <div className="flex w-full flex-col items-center">
+          <div className="flex h-full flex-col items-center justify-between lg:w-3/5 ">
+            <div className="flex h-[50%] w-full flex-col items-center">
               <label className="text-2xl">Foto de Fundo</label>
               <label for="dropzone-banner">
                 {!bannerImage_URL ? (
                   <img
                     src={user.bannerImageSrc}
                     alt="logo"
-                    className="mb-4 h-24 w-96 border border-gray-500 object-fill hover:cursor-pointer"
+                    className="mb-4 h-full w-96 border border-gray-500 object-fill hover:cursor-pointer"
                   />
                 ) : (
                   <img
                     src={bannerImage_URL}
                     alt="logo"
-                    className="mb-4 h-24 w-96 border border-gray-500 object-fill hover:cursor-pointer"
+                    className="mb-4 h-full w-96 border border-gray-500 object-fill hover:cursor-pointer"
                   />
                 )}
                 <input
@@ -162,8 +159,8 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                 />
               </label>
             </div>
-            <div className="flex h-[45%] w-full justify-between p-1">
-              <div className="flex w-1/2 flex-col items-center justify-between">
+            <div className="flex h-[50%] w-full flex-col gap-2 justify-between">
+              <div className="flex h-1/2 items-end justify-between gap-2">
                 <div className="flex w-5/6 flex-col gap-2">
                   <label>E-mail</label>
                   <Input
@@ -178,21 +175,6 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                   />
                 </div>
                 <div className="flex w-5/6 flex-col gap-2">
-                  <label>Senha</label>
-                  <Input
-                    type="password"
-                    placeholder="Digite uma nova senha"
-                    value={data.password}
-                    onChange={(e) => {
-                      setData({ ...data, password: e.target.value });
-                    }}
-                    name="password"
-                    customStyles={"w-full"}
-                  />
-                </div>
-              </div>
-              <div className="flex w-1/2 flex-col items-center justify-between">
-                <div className="flex w-5/6 flex-col gap-2">
                   <label>Nome</label>
                   <Input
                     type="text"
@@ -205,16 +187,22 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                     customStyles={"w-full"}
                   />
                 </div>
-                <div className="flex w-5/6 flex-col items-end justify-end">
-                  {!isNameValid && (
-                    <p className="text-md text-red-500">Nome inválido</p>
-                  )}
-                  {!isEmailValid && (
-                    <p className="text-md text-red-500">Email inválido</p>
-                  )}
-                  {!isPasswordValid && (
-                    <p className="text-md text-red-500">Senha inválida</p>
-                  )}
+              </div>
+              <div className="flex h-1/2 items-end justify-between gap-2">
+                <div className="flex w-5/6 flex-col gap-2">
+                  <label>Senha</label>
+                  <Input
+                    type="password"
+                    placeholder="Digite uma nova senha"
+                    value={data.password}
+                    onChange={(e) => {
+                      setData({ ...data, password: e.target.value });
+                    }}
+                    name="password"
+                    customStyles={"w-full"}
+                  />
+                </div>
+                <div className="w-5/6">
                   <Button
                     label="Atualizar"
                     customStyles="w-full p-2 bg-light-primary text-white dark:text-light-background enabled:hover:brightness-75 enabled:dark:hover:brightness-75"

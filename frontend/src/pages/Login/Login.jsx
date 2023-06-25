@@ -48,7 +48,7 @@ export const Login = () => {
         const { data } = result;
         localStorage.setItem("user", JSON.stringify(data));
         navigate(InsideLinks.home);
-      },
+      }
     });
   };
   const handleRegisterButtonClick = () => {

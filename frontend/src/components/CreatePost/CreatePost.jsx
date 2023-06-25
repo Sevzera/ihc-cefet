@@ -1,5 +1,4 @@
 import React from "react";
-import { v4 as uuidv4 } from "uuid";
 import * as Icon from "react-feather";
 import { useQueryClient } from "react-query";
 
@@ -7,7 +6,7 @@ import { Button } from "../../components/Button";
 import { IconButton } from "../../components/IconButton";
 import { HorizontalDivider } from "../../components/Divider";
 
-import { useCreatePost, usePost } from "../../api/post.js";
+import { useCreatePost } from "../../api/post.js";
 
 
 export const CreatePost = ({ icon, size }) => {
@@ -17,7 +16,7 @@ export const CreatePost = ({ icon, size }) => {
   const localUser = JSON.parse(localStorage.getItem("user"));
   const [data, setData] = React.useState({
     text: "",
-    imageSrc: "",
+    imageSrc: null,
   });
   const [selectedPostImage, setSelectedPostImage] = React.useState();
 
@@ -38,20 +37,19 @@ export const CreatePost = ({ icon, size }) => {
     });
   }
 
-  const handlePostImage = (event) => {
+  const handlePostImage = async (event) => {
     const file = event.target.files[0];
     if (file) {
       setSelectedPostImage(URL.createObjectURL(file));
-      const imagePromise = readFile(file);
-      const image_64 = imagePromise.then((obj) => {
-        setData({ ...data, imageSrc: obj.b64.split(",").pop() });
-      });
+      const fileRead = await readFile(file);
+      const imageSrc = fileRead.b64.split(",").pop();
+      setData({ ...data, imageSrc });
     }
   };
 
   const removePostImage = () => {
     setSelectedPostImage(null);
-    setData({ ...data, imageSrc: "" });
+    setData({ ...data, imageSrc: null });
   };
 
   const onInputTextArea = (e) => {
@@ -62,16 +60,12 @@ export const CreatePost = ({ icon, size }) => {
   };
 
   const onClickPost = () => {
-    if (data.text === "") {
-      alert("O texto não pode estar vazio!");
-      return;
-    }
     createPost(data, {
       onSuccess: () => {
         queryClient.refetchQueries("posts");
       },
     });
-    setData({ ...data, text: "", imageSrc: "" });
+    setData({ ...data, text: "", imageSrc: null });
     setSelectedPostImage(null);
   };
 

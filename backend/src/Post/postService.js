@@ -5,7 +5,7 @@ import imgbbUploader from "imgbb-uploader";
 const postCollection = database.collection("post");
 
 const postService = {};
-const imgBB_url = 'https://api.imgbb.com/1/upload'
+const imgBB_key = "d800fef0297081cd154ac0a53179efe1";
 
 postService.show = async (
   id,
@@ -91,39 +91,35 @@ postService.index = async (
 
 postService.create = async (data) => {
   try {
-    const { userId, text = "", imageSrc = "" } = data;
-    if (!userId) throw new Error("Missing _id or userId");
+    const { userId, text, imageSrc } = data;
+    if (!userId || !text) throw new Error("Missing userId or text");
 
     const user = await userService.show(userId);
     if (!user) throw new Error("User not found");
 
-    const post = {
+    const newData = {
       _id: uuidv4(),
       userId,
       text,
-      imageSrc,
+      imageSrc: "",
       likes: [],
       comments: [],
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
 
-    if (data.imageSrc == undefined) {
-      return await postCollection.insertOne(post)
-    } else {
+    if (imageSrc) {
       const imgbbOptions = {
-        apiKey: "d800fef0297081cd154ac0a53179efe1",
-        base64string: data.imageSrc,
-        name: Date.now() + data._id + "_post",
-      }
-
-      return imgbbUploader(imgbbOptions).then(async (response) => {
-        post.imageSrc = response.url;
-        return await postCollection.insertOne(post)
-      }).catch((error) => console.error(error))
+        apiKey: imgBB_key,
+        base64string: imageSrc,
+        name: Date.now() + newData._id + "_post",
+      };
+      const response = await imgbbUploader(imgbbOptions);
+      const { url } = response;
+      newData.imageSrc = url;
     }
 
-    return await postCollection.insertOne(post);
+    return await postCollection.insertOne(newData);
   } catch (error) {
     console.log("Error in postService.create: ", error);
     throw error;
@@ -135,7 +131,7 @@ postService.update = async (id, data) => {
     if (!id) throw new Error("Missing id");
     const { text, imageSrc, likes, comments } = data;
 
-    const post = {
+    const updatedData = {
       ...(text && { text }),
       ...(imageSrc && { imageSrc }),
       ...(likes && { likes }),
@@ -143,7 +139,7 @@ postService.update = async (id, data) => {
       updatedAt: Date.now(),
     };
 
-    return await postCollection.updateOne({ _id: id }, { $set: post });
+    return await postCollection.updateOne({ _id: id }, { $set: updatedData });
   } catch (error) {
     console.log("Error in postService.update: ", error);
     throw error;

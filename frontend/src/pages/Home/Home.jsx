@@ -22,6 +22,7 @@ export const Home = () => {
     },
     {
       initialData: [],
+      enabled: Boolean(localUser.friends.length > 0),
     }
   );
 

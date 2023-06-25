@@ -94,7 +94,7 @@ export const Post = ({ post }) => {
       <div id="user" className="flex h-fit w-full flex-row items-center gap-2">
         <div
           className="flex w-fit cursor-pointer flex-row items-center gap-2"
-          onClick={() => onClickUser(comment.user)}
+          onClick={() => onClickUser(post.user)}
         >
           <img
             src={post.user.profilePictureSrc}
