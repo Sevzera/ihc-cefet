@@ -114,13 +114,13 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                   <img
                     src={user.profilePictureSrc}
                     alt="logo"
-                    className="h-72 w-80 rounded border border-gray-500 hover:cursor-pointer"
+                    className="h-72 w-72 rounded border border-gray-500 hover:cursor-pointer"
                   />
                 ) : (
                   <img
                     src={profilePicture_URL}
                     alt="logo"
-                    className="h-72 w-80 rounded border border-gray-500 hover:cursor-pointer"
+                    className="h-72 w-72 rounded border border-gray-500 hover:cursor-pointer"
                   />
                 )}
                 <input
