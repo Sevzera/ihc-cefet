@@ -80,9 +80,9 @@ export const Home = () => {
               onClick={async () => {
                 setCurrentPage((prev) => prev + 1);
                 const { data } = await refetchPosts();
-                if (data.length === 0) {
-                  setArePostsOver(true);
-                }
+                // if (data.length === 0) {
+                //   setArePostsOver(true);
+                // }
               }}
             >
               {arePostsOver ? "Não há mais posts" : "Carregar mais posts"}
