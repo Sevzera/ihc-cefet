@@ -5,7 +5,7 @@ import imgbbUploader from "imgbb-uploader";
 const userCollection = database.collection("user");
 
 const userService = {};
-const imgBB_url = 'https://api.imgbb.com/1/upload'
+const imgBB_key = "d800fef0297081cd154ac0a53179efe1";
 
 userService.login = async (credentials) => {
   try {
@@ -45,42 +45,36 @@ userService.index = async (filters) => {
 
 userService.create = async (data) => {
   try {
-    const { email, password, name } = data;
+    const { email, password, name, profilePictureSrc } = data;
     if (!email || !password || !name)
       throw new Error("Missing required fields");
 
-    const encryptedPassword = await bcrypt.hash(password, 10);
-    const defaultProfilePicture =
-      "https://i.ibb.co/nwfMnMC/my-Manga-List-default-user-profile-pic.png";
-    const defaultBanner =
-      "https://www.bio.org/act-root/bio/assets/images/banner-default.png";
-    const user = {
+    const newData = {
       _id: uuidv4(),
       email,
-      password: encryptedPassword,
+      password: await bcrypt.hash(password, 10),
       name,
-      profilePictureSrc: defaultProfilePicture,
-      bannerImageSrc: defaultBanner,
+      profilePictureSrc:
+        "https://i.ibb.co/nwfMnMC/my-Manga-List-default-user-profile-pic.png",
+      bannerImageSrc:
+        "https://www.bio.org/act-root/bio/assets/images/banner-default.png",
       friends: [],
-      friendRequests: [],
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
 
-    if (data.profilePictureSrc == undefined) {
-      return userCollection.insertOne(user);
-    } else {
+    if (profilePictureSrc) {
       const imgbbOptions = {
-        apiKey: "d800fef0297081cd154ac0a53179efe1",
-        base64string: data.profilePictureSrc,
-        name: Date.now() + data._id,
-      }
-
-      return imgbbUploader(imgbbOptions).then(async (response) => {
-        user.profilePictureSrc = response.url;
-        return userCollection.insertOne(user)
-      }).catch((error) => console.error(error))
+        apiKey: imgBB_key,
+        base64string: newData.profilePictureSrc,
+        name: Date.now() + newData._id,
+      };
+      const response = await imgbbUploader(imgbbOptions);
+      const { url } = response;
+      newData.profilePictureSrc = url;
     }
+
+    return userCollection.insertOne(newData);
   } catch (error) {
     console.log("Error in userService.create: ", error);
     throw error;
@@ -91,55 +85,44 @@ userService.update = async (id, data) => {
   try {
     if (!id) throw new Error("Missing id");
 
-    const currentUserData = await userCollection.findOne({ _id: id });
+    const {
+      name,
+      email,
+      password,
+      friends,
+      profilePictureSrc,
+      bannerImageSrc,
+    } = data;
 
-    let newProfilePicture = currentUserData.profilePictureSrc;
-    let newBanner = currentUserData.bannerImageSrc;
-
-    if (
-      data.profilePictureSrc != currentUserData.profilePictureSrc &&
-      data.profilePictureSrc != undefined
-    ) {
-      const imgbbOptions = {
-        apiKey: "d800fef0297081cd154ac0a53179efe1",
-        base64string: data.profilePictureSrc,
-        name: currentUserData._id + Date.now(),
-      };
-      newProfilePicture = await imgbbUploader(imgbbOptions)
-        .then(async (response) => {
-          return response.url;
-        })
-        .catch((error) => console.error(error));
-    }
-
-    if (
-      data.bannerImageSrc != currentUserData.bannerImageSrc &&
-      data.bannerImageSrc != undefined
-    ) {
-      const imgbbOptions = {
-        apiKey: "d800fef0297081cd154ac0a53179efe1",
-        base64string: data.bannerImageSrc,
-        name: "banner_" + currentUserData._id + Date.now(),
-      };
-      newBanner = await imgbbUploader(imgbbOptions)
-        .then(async (response) => {
-          return response.url;
-        })
-        .catch((error) => console.error(error));
-    }
-
-    if(data.password == ""){
-      data.password = currentUserData.password
-    } else {
-      data.password = await bcrypt.hash(data.password, 10)
-    }
-
-    const updatedData = {
-      ...data,
-      profilePictureSrc: newProfilePicture,
-      bannerImageSrc: newBanner,
+    let updatedData = {
+      ...(name && { name }),
+      ...(email && { email }),
+      ...(password && { password: await bcrypt.hash(password, 10) }),
+      ...(friends && { friends }),
       updatedAt: Date.now(),
     };
+
+    if (profilePictureSrc) {
+      const imgbbOptions = {
+        apiKey: imgBB_key,
+        base64string: profilePictureSrc,
+        name: id + Date.now(),
+      };
+      const response = await imgbbUploader(imgbbOptions);
+      const { url } = response;
+      updatedData.profilePictureSrc = url;
+    }
+
+    if (bannerImageSrc) {
+      const imgbbOptions = {
+        apiKey: imgBB_key,
+        base64string: bannerImageSrc,
+        name: "banner_" + id + Date.now(),
+      };
+      const response = await imgbbUploader(imgbbOptions);
+      const { url } = response;
+      updatedData.bannerImageSrc = url;
+    }
 
     return userCollection.findOneAndUpdate({ _id: id }, { $set: updatedData });
   } catch (error) {

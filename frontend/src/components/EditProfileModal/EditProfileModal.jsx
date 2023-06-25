@@ -5,7 +5,6 @@ import { Input } from "../Input";
 import { Button } from "../Button";
 import { useUpdateUser, useUser } from "../../api/user";
 import { useParams } from "react-router-dom";
-import { useQueryClient } from "react-query";
 
 export const EditProfileModal = ({ refetchData, closeModal }) => {
   const { userId } = useParams();
@@ -30,11 +29,11 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
   }
 
   const [data, setData] = React.useState({
-    profilePictureSrc: "",
-    bannerImageSrc: "",
-    name: "",
-    email: "",
-    password: "",
+    profilePictureSrc: null,
+    bannerImageSrc: null,
+    name: null,
+    email: null,
+    password: null,
   });
 
   const handleProfilePicture = (event) => {
@@ -215,12 +214,21 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                     customStyles={"w-full"}
                   />
                 </div>
-                <div className="flex w-5/6 justify-end">
+                <div className="flex w-5/6 flex-col items-end justify-end">
+                  {!isNameValid && (
+                    <p className="text-md text-red-500">Nome inválido</p>
+                  )}
+                  {!isEmailValid && (
+                    <p className="text-md text-red-500">Email inválido</p>
+                  )}
+                  {!isPasswordValid && (
+                    <p className="text-md text-red-500">Senha inválida</p>
+                  )}
                   <Button
                     label="Atualizar"
                     customStyles="w-full p-2 bg-light-primary text-white dark:text-light-background enabled:hover:brightness-75 enabled:dark:hover:brightness-75"
                     onClick={() => updateUser(data)}
-                    disabled={isInfoValid || isUpdateUserLoading}
+                    disabled={!isInfoValid || isUpdateUserLoading}
                   />
                 </div>
               </div>
