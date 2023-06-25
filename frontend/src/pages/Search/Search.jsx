@@ -31,7 +31,8 @@ export const Search = () => {
     },
     {
       initialData: [],
-    }
+    },
+    ["search"]
   );
 
   const onClickUser = (user) => {

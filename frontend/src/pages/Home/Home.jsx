@@ -26,6 +26,7 @@ export const Home = () => {
     }
   );
 
+  const [arePostsOver, setArePostsOver] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
   const { refetch: refetchPosts, status } = usePosts(
     {
@@ -40,6 +41,7 @@ export const Home = () => {
     },
     {
       initialData: [],
+      enabled: Boolean(!arePostsOver),
     }
   );
   let posts = buildPostFeed(currentPage);
@@ -74,13 +76,16 @@ export const Home = () => {
             <div>Carregando</div>
           ) : (
             <button
+              disabled={arePostsOver}
               onClick={async () => {
                 setCurrentPage((prev) => prev + 1);
-                await new Promise((resolve) => setTimeout(resolve, 1000));
-                await refetchPosts();
+                const { data } = await refetchPosts();
+                if (data.length === 0) {
+                  setArePostsOver(true);
+                }
               }}
             >
-              Carregar mais posts
+              {arePostsOver ? "Não há mais posts" : "Carregar mais posts"}
             </button>
           )}
         </div>

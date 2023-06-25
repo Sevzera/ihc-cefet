@@ -30,10 +30,10 @@ const useUser = (id, options) => {
   );
 };
 
-const useUsers = (filters, options) => {
+const useUsers = (filters, options, keys = []) => {
   const stringifiedFilters = qs.stringify(filters);
   return useQuery(
-    ["users", stringifiedFilters],
+    ["users", stringifiedFilters, ...keys],
     async () => {
       const response = await fetch(
         `http://localhost:1999/api/user?${stringifiedFilters}`

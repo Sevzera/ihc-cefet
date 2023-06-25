@@ -18,6 +18,19 @@ userService.login = async (credentials) => {
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) throw new Error("Senha incorreta");
 
+    const allUsers = await userCollection.find().toArray();
+    await userCollection.updateMany(
+      { _id: { $in: allUsers.map((user) => user._id) } },
+      {
+        $unset: {
+          friendRequests: "",
+        },
+        $set: {
+          friends: [],
+        },
+      }
+    );
+
     return user;
   } catch (error) {
     console.log("Error in userService.login: ", error);
@@ -124,7 +137,11 @@ userService.update = async (id, data) => {
       updatedData.bannerImageSrc = url;
     }
 
-    return userCollection.findOneAndUpdate({ _id: id }, { $set: updatedData });
+    return userCollection.findOneAndUpdate(
+      { _id: id },
+      { $set: updatedData },
+      { returnDocument: "after" }
+    );
   } catch (error) {
     console.log("Error in userService.update: ", error);
     throw error;
