@@ -80,19 +80,10 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
     },
   });
 
-  const currentUserInfo = useUser(userId);
-
-  const isInfoValid =
-    data.profilePictureSrc &&
-    data.profilePictureSrc !== user.profilePictureSrc &&
-    data.bannerImageSrc &&
-    data.bannerImageSrc !== user.bannerImageSrc &&
-    data.name &&
-    data.name !== user.name &&
-    data.email &&
-    data.email !== user.email &&
-    data.password &&
-    data.password !== "";
+  const isNameValid = Boolean(data.name && data.name.length >= 3);
+  const isEmailValid = Boolean(data.email && data.email.includes("@"));
+  const isPasswordValid = Boolean(data.password && data.password.length >= 6);
+  const isInfoValid = isNameValid && isEmailValid && isPasswordValid;
 
   return (
     <div className="fixed z-50 flex h-full w-full items-center justify-center">
@@ -124,7 +115,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
               <label for="dropzone-profile-pic">
                 {!profilePicture_URL ? (
                   <img
-                    src={currentUserInfo.data.profilePictureSrc}
+                    src={user.profilePictureSrc}
                     alt="logo"
                     className="h-72 w-80 rounded border border-gray-500 hover:cursor-pointer"
                   />
@@ -151,7 +142,7 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
               <label for="dropzone-banner">
                 {!bannerImage_URL ? (
                   <img
-                    src={currentUserInfo.data.bannerImageSrc}
+                    src={user.bannerImageSrc}
                     alt="logo"
                     className="mb-4 h-24 w-96 border border-gray-500 object-fill hover:cursor-pointer"
                   />
