@@ -63,7 +63,7 @@ export const Search = () => {
               <img
                 src={user.profilePictureSrc}
                 alt="profile picture"
-                className="h-10 w-10 border-2 border-black object-contain"
+                className="h-10 w-10 border-2 border-black object-cover"
               />
               <div className="flex w-full flex-col">
                 <h1>{user.name}</h1>
