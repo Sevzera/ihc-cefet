@@ -31,7 +31,8 @@ export const Search = () => {
     },
     {
       initialData: [],
-    }
+    },
+    ["search"]
   );
 
   const onClickUser = (user) => {
@@ -62,7 +63,7 @@ export const Search = () => {
               <img
                 src={user.profilePictureSrc}
                 alt="profile picture"
-                className="h-full w-24 lg:w-16 border-2 border-black object-contain"
+                className="h-full w-24 lg:w-16 border-2 border-black object-cover"
               />
               <div className="flex w-full flex-col">
                 <h1>{user.name}</h1>

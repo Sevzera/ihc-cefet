@@ -21,9 +21,17 @@ export const Profile = () => {
   const localUser = JSON.parse(localStorage.getItem("user"));
   const isMyProfile = localUser._id === userId;
   const isMyFriend = localUser.friends.includes(userId);
-  const { data: user, refetch: refetchUser } = useUser(userId, {
-    initialData: {},
+
+  const {
+    data: user,
+    refetch: refetchUser,
+    isLoading: isUserLoading,
+  } = useUser(userId, {
+    initialData: {
+      friends: [],
+    },
   });
+
   const { data: friends } = useUsers(
     {
       _id: {
@@ -32,18 +40,21 @@ export const Profile = () => {
     },
     {
       initialData: [],
-      enabled: Boolean(isMyProfile && localUser.friends.length > 0),
+      enabled: Boolean(
+        isMyProfile && !isUserLoading && user.friends.length > 0
+      ),
     }
   );
   const { mutate: updateUser } = useUpdateUser(localUser._id, {
-    onSettled: (data) => {
+    onSuccess: (data) => {
       const { value: updatedLocalUser } = data;
       localStorage.setItem("user", JSON.stringify(updatedLocalUser));
     },
-    enabled: !isMyProfile,
+    enabled: Boolean(isMyProfile && !isUserLoading),
   });
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
+  const [arePostsOver, setArePostsOver] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
   const { refetch: refetchPosts } = usePosts(
     {
@@ -56,6 +67,7 @@ export const Profile = () => {
     },
     {
       initialData: [],
+      enabled: Boolean(!arePostsOver),
     }
   );
   const posts = buildPostFeed(currentPage, [userId]);
@@ -150,13 +162,16 @@ export const Profile = () => {
               ))}
             </div>
             <button
+              disabled={arePostsOver}
               onClick={async () => {
                 setCurrentPage((prev) => prev + 1);
-                await new Promise((resolve) => setTimeout(resolve, 1000));
-                await refetchPosts();
+                const { data } = await refetchPosts();
+                // if (data.length === 0) {
+                //   setArePostsOver(true);
+                // }
               }}
             >
-              Carregar mais posts
+              {arePostsOver ? "Não há mais posts" : "Carregar mais posts"}
             </button>
           </div>
         </div>
