@@ -90,7 +90,7 @@ export const Post = ({ post }) => {
   };
 
   return (
-    <div className="h-fit w-full">
+    <div className="pt-4 px-3 lg:p-0 h-fit w-full">
       <div id="user" className="flex h-fit w-full flex-row items-center gap-2">
         <div
           className="flex w-fit cursor-pointer flex-row items-center gap-2"
@@ -139,7 +139,7 @@ export const Post = ({ post }) => {
       </div>
       <div
         id="comment"
-        className="flex h-fit w-full flex-row items-center gap-2"
+        className="flex h-fit w-full flex-row items-center gap-0 lg:gap-2"
       >
         <CommentTextArea
           writable={true}
@@ -148,7 +148,7 @@ export const Post = ({ post }) => {
         />
         <Button
           label="Comentar"
-          customStyles="w-fit p-2 bg-light-primary text-white dark:text-light-background hover:brightness-75 dark:hover:brightness-75"
+          customStyles="w-fit p-2 py-6 lg:py-2 rounded-none rounded-r-lg lg:rounded-l-lg bg-light-primary text-white dark:text-light-background hover:brightness-75 dark:hover:brightness-75"
           onClick={onClickComment}
           disabled={!commentText || isUpdatePostLoading}
         />

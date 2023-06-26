@@ -39,20 +39,20 @@ export const Search = () => {
   };
 
   return (
-    <div className="h-full w-full overflow-y-auto p-5">
+    <div className="h-full w-full overflow-y-auto py-32 lg:py-5 text-[32px] lg:text-[16px]">
       <div className="flex flex-col items-center justify-center gap-8">
-        <div className="flex w-3/4 flex-row gap-2">
+        <div className="flex w-[90%] lg:w-3/4 flex-row gap-2">
           <Input
             icon={<Icon.Search size={18} />}
             id="search"
             type="text"
             name="search"
             placeholder="Pesquisar"
-            customStyles={"w-full"}
+            customStyles={"h-full w-full"}
             onChange={(e) => setSearchText(e.target.value)}
           />
         </div>
-        <div className="flex w-3/4 flex-col gap-5">
+        <div className="flex w-[90%] lg:w-3/4 flex-col gap-5">
           {users.map((user) => (
             <div
               key={user._id}
@@ -62,7 +62,7 @@ export const Search = () => {
               <img
                 src={user.profilePictureSrc}
                 alt="profile picture"
-                className="h-10 w-10 border-2 border-black object-contain"
+                className="h-full w-24 lg:w-16 border-2 border-black object-contain"
               />
               <div className="flex w-full flex-col">
                 <h1>{user.name}</h1>

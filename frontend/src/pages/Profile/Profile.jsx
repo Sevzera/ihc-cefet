@@ -61,7 +61,7 @@ export const Profile = () => {
   const posts = buildPostFeed(currentPage, [userId]);
 
   return (
-    <div className="h-full w-full overflow-y-auto pb-10">
+    <div className="h-full w-full overflow-y-auto pb-28 lg:pb-10">
       {isMyProfile && isModalOpen && (
         <EditProfileModal
           refetchData={() => {
@@ -71,11 +71,11 @@ export const Profile = () => {
           closeModal={() => setIsModalOpen(false)}
         />
       )}
-      <div className={`${isModalOpen ? "blur-xl" : "blur-0"}`}>
+      <div className={`${isModalOpen ? "blur-xl" : "blur-0"} text-[26px] lg:text-[16px]`}>
         <div id="main-profile" className="pb-14">
           <img
             id="background-image"
-            className="h-80 w-full border border-light-secondary dark:border-dark-secondary"
+            className="h-80 w-full"
             src={user.bannerImageSrc}
             alt={user.name}
           />
@@ -122,7 +122,7 @@ export const Profile = () => {
           </div>
         </div>
         <div className="flex justify-center">
-          <div className="flex w-3/4 flex-col gap-8">
+          <div className="flex w-[90%] lg:w-3/4 flex-col gap-8">
             {isMyProfile && (
               <div id="friend-list" className="flex w-full">
                 <FriendList friends={friends} />

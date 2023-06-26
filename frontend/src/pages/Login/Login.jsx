@@ -57,7 +57,7 @@ export const Login = () => {
 
   return (
     <div className="flex h-full w-full">
-      <div className="flex h-full w-1/2 flex-col items-center justify-center">
+      <div className="hidden h-full w-1/2 flex-col items-center justify-center lg:flex">
         <img
           src={loginPageCollage}
           alt="collage"
@@ -72,18 +72,25 @@ export const Login = () => {
           </p>
         </div>
       </div>
-      <div className="flex items-center">
+      <div className="hidden items-center lg:flex">
         <Divider customStyles="h-4/5" />
       </div>
-      <div className="flex h-full w-1/2 flex-col items-center justify-center">
-        <div className="mb-10 w-1/2">
+      <div className="flex h-full lg:w-1/2 flex-col items-center justify-center">
+        <div className="pb-2 w-1/3 lg:hidden">
+          <img
+            src={loginPageCollage}
+            alt="collage"
+            className="object-contain"
+          />
+        </div>
+        <div className="mb-24 lg:mb-10 w-[50%] lg:w-1/2">  
           <img
             src={darkMode ? logoDark : logoLight}
             alt="logo"
             className="object-contain"
           />
         </div>
-        <div className="flex w-1/2 flex-col items-center justify-center gap-3">
+        <div className="flex w-1/2 flex-col items-center justify-center gap-3 scale-150 lg:scale-100">
           <Input
             icon={<Icon.AtSign size={22} />}
             type="email"
@@ -109,19 +116,19 @@ export const Login = () => {
           <div className="flex w-full items-center justify-center">
             <Button
               label="LOGIN"
-              customStyles="w-1/2"
+              customStyles="w-full"
               onClick={handleLoginButtonClick}
             />
           </div>
           <div
             onClick={handleRegisterButtonClick}
-            className="w-2/3 overflow-hidden text-center text-light-primary hover:cursor-pointer hover:underline"
+            className="w-full text-[24px] lg:text-[20px] overflow-hidden text-center text-light-primary hover:cursor-pointer hover:underline"
           >
             Não Possui uma conta? Registre-se
           </div>
         </div>
       </div>
-      <div className="absolute bottom-4 left-0 w-16 rounded-r-md bg-light-secondary shadow-xl dark:bg-dark-secondary">
+      <div className="absolute bottom-2 lg:bottom-4 left-3 lg:left-0 w-16 rounded-tr-md lg:rounded-r-md scale-150 lg:scale-100 bg-light-secondary shadow-xl dark:bg-dark-secondary">
         {darkMode ? (
           <IconButton
             icon={<Icon.Sun size={24} />}

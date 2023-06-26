@@ -29,8 +29,8 @@ export const SideBar = () => {
   };
 
   return (
-    <div className="left-0 top-0 flex h-screen w-16 flex-col gap-3 border-r-2 border-zinc-500 border-opacity-20 bg-light-background p-3 dark:bg-dark-background">
-      <div className="flex flex-col items-center">
+    <div className="flex justify-between lg:justify-normal left-0 top-0 lg:flex h-20 w-screen lg:h-screen lg:w-16 flex-row lg:flex-col gap-3 border-t-[1px] lg:border-r-[1px] shadow-xl border-zinc-500 border-opacity-20 bg-light-background p-3 dark:bg-dark-background">
+      <div className="flex flex-col justify-center items-center pl-8 lg:pl-0">
         <IconButton
           icon={<Icon.User size={24} />}
           tooltip="Profile"
@@ -41,8 +41,8 @@ export const SideBar = () => {
           }
         />
       </div>
-      <Divider customStyles="w-full" />
-      <div className="flex flex-col items-center gap-2">
+      <Divider customStyles="w-full hidden lg:flex" />
+      <div className="flex flex-row lg:flex-col items-center gap-28 lg:gap-2">
         <IconButton
           icon={<Icon.Home size={24} />}
           tooltip="Home"
@@ -61,8 +61,8 @@ export const SideBar = () => {
           onClickFunction={() => handleButtonClickNavigation(InsideLinks.login)}
         />
       </div>
-      <Divider customStyles="w-full" />
-      <div className="flex flex-col items-center">
+      <Divider customStyles="w-full hidden lg:flex" />
+      <div className="flex flex-col justify-center items-center pr-8 lg:pr-0">
         {darkMode ? (
           <IconButton
             icon={<Icon.Sun size={24} />}

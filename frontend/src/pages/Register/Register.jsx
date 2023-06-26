@@ -92,17 +92,17 @@ export const Register = () => {
 
   return (
     <div className="flex h-full w-full items-center justify-center">
-      <div className="flex w-3/4 flex-col items-center justify-center gap-5">
+      <div className="flex w-full flex-col items-center justify-center gap-5">
         <div className="flex w-full flex-col items-center justify-center text-center">
-          <p className="text-[50px] font-bold text-light-primary">
+          <p className="text-[80px] lg:text-[50px] font-bold text-light-primary">
             CADASTRE-SE
           </p>
-          <p className="text-[20px] text-light-secondary dark:text-dark-secondary">
+          <p className="text-[36px] lg:text-[20px] text-light-secondary dark:text-dark-secondary">
             Apenas a um clique de se <span className="underline">conectar</span>
           </p>
         </div>
-        <div className="flex w-full flex-col items-center justify-center gap-5">
-          <div className="relative w-1/5">
+        <div className="flex w-full flex-col items-center justify-center gap-8 lg:gap-5">
+          <div className="relative w-2/5 lg:w-1/5">
             <div className="absolute -top-1 right-1">
               <IconButton
                 icon={<Icon.HelpCircle size={24} />}
@@ -133,7 +133,7 @@ export const Register = () => {
               />
             </label>
           </div>
-          <div className="flex w-1/2 flex-col gap-2">
+          <div className="flex w-1/2 flex-col gap-3 lg:gap-2 scale-125 lg:scale-100">
             <Input
               icon={<Icon.User size={22} />}
               type="text"
@@ -168,7 +168,7 @@ export const Register = () => {
               customStyles={"w-full"}
             />
           </div>
-          <div className="flex w-1/2 flex-row items-center justify-center gap-2">
+          <div className="flex w-1/2 flex-row items-center justify-center gap-2 scale-125 lg:scale-100">
             <Button
               label="REGISTRAR"
               customStyles="w-1/2"
@@ -182,7 +182,7 @@ export const Register = () => {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-4 left-0 w-16 rounded-r-md bg-light-secondary shadow-xl dark:bg-dark-secondary">
+      <div className="absolute bottom-2 lg:bottom-4 left-3 lg:left-0 w-16 rounded-tr-md lg:rounded-r-md scale-150 lg:scale-100 bg-light-secondary shadow-xl dark:bg-dark-secondary">
         {darkMode ? (
           <IconButton
             icon={<Icon.Sun size={24} />}

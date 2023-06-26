@@ -83,9 +83,9 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
   const isInfoValid = Boolean(data.name && data.email && data.password);
 
   return (
-    <div className="fixed z-50 flex h-full w-full items-center justify-center">
+    <div className="fixed z-50 flex h-full w-full items-center justify-center py-96">
       <div
-        className="flex h-fit w-[80%] flex-col justify-center rounded-lg border border-dark-background bg-light-background p-4 shadow-2xl 
+        className="flex h-fit w-full flex-col justify-center rounded-lg bg-light-background p-4 shadow-2xl 
       dark:border-light-background dark:bg-dark-background md:w-[70%] 2xl:w-[50%]"
       >
         <div className="flex justify-between pb-3">
@@ -101,8 +101,8 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
         <div className="flex w-full flex-col gap-2 lg:flex-row lg:gap-0">
           <div className="flex h-full flex-col items-center lg:w-2/5">
             <label className="text-2xl">Foto de Perfil</label>
-            <div className="relative">
-              <div className="absolute -top-1 right-1">
+            <div className="relative py-2 px-6">
+              <div className="absolute -top-1 right-4">
                 <IconButton
                   icon={<Icon.HelpCircle size={24} />}
                   tooltip="Selecione uma foto de perfil clicando na imagem"
@@ -114,13 +114,13 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                   <img
                     src={user.profilePictureSrc}
                     alt="logo"
-                    className="h-72 w-80 rounded border border-gray-500 hover:cursor-pointer"
+                    className="h-full w-48 lg:w-72 rounded hover:cursor-pointer"
                   />
                 ) : (
                   <img
                     src={profilePicture_URL}
                     alt="logo"
-                    className="h-72 w-80 rounded border border-gray-500 hover:cursor-pointer"
+                    className="h-full w-48 lg:w-72 rounded hover:cursor-pointer"
                   />
                 )}
                 <input
@@ -141,13 +141,13 @@ export const EditProfileModal = ({ refetchData, closeModal }) => {
                   <img
                     src={user.bannerImageSrc}
                     alt="logo"
-                    className="mb-4 h-full w-96 border border-gray-500 object-fill hover:cursor-pointer"
+                    className="mb-4 h-full w-96 lg:w-[680px] object-fill rounded py-2 hover:cursor-pointer"
                   />
                 ) : (
                   <img
                     src={bannerImage_URL}
                     alt="logo"
-                    className="mb-4 h-full w-96 border border-gray-500 object-fill hover:cursor-pointer"
+                    className="mb-4 h-full w-96 lg:w-[680px] object-fill rounded py-2 hover:cursor-pointer"
                   />
                 )}
                 <input
