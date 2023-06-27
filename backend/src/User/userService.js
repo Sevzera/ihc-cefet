@@ -79,7 +79,7 @@ userService.create = async (data) => {
     if (profilePictureSrc) {
       const imgbbOptions = {
         apiKey: imgBB_key,
-        base64string: newData.profilePictureSrc,
+        base64string: profilePictureSrc,
         name: Date.now() + newData._id,
       };
       const response = await imgbbUploader(imgbbOptions);

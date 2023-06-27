@@ -49,7 +49,7 @@ export const Search = () => {
             type="text"
             name="search"
             placeholder="Pesquisar"
-            customStyles={"h-full w-full"}
+            customStyles={"w-full"}
             onChange={(e) => setSearchText(e.target.value)}
           />
         </div>

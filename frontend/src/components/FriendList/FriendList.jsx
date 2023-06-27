@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 export const FriendList = ({ friends }) => {
   const navigate = useNavigate();
 
-  const numberOfFriendsShown = 10;
+  const numberOfFriendsShown = 5;
   const [startPositionInArray, setStartPositionInArray] = React.useState(0);
 
   const onClickLeftArrow = () => {
