@@ -31,7 +31,7 @@ export const Input = ({
         <span>
           <span
             alt={`input-icon-${name}`}
-            className="flex w-14 items-center justify-center text-input-icon"
+            className="flex w-14 items-center justify-center  text-input-icon"
           >
             {icon}
           </span>
